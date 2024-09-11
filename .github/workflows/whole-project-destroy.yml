@@ -1,0 +1,140 @@
+name: "D1 - Whole project: Destroy"
+run-name: "D1 - Whole project: Destroy"
+
+on: 
+  workflow_dispatch:
+    inputs:
+      CONFIRMATION:
+        required: true
+        type: string
+        description: "Vazio aborta. Qualquer valor confirma."
+
+jobs:
+  #################################
+  ######## Destroy project ########
+  #################################
+  deploy_app:
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '8a'
+      ACTION: 'd'
+    secrets: inherit
+
+  vpc_endpoint_ssm:
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '7c'
+      ACTION: 'd'
+    secrets: inherit        
+    
+  vpc_endpoint_s3:
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '7b'
+      ACTION: 'd'
+    secrets: inherit    
+
+  vpc_endpoint_codedeploy:
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '7a'
+      ACTION: 'd'
+    secrets: inherit
+
+  elb_app:
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '6a'
+      ACTION: 'd'
+    secrets: inherit
+
+  image_builder_app:
+    needs: [
+      elb_app
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '4c'
+      ACTION: 'd'
+    secrets: inherit
+
+  ami_app:
+    needs: [
+      elb_app,
+      image_builder_app
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '5a'
+      ACTION: 'd'
+    secrets: inherit
+
+  efs_app:
+    needs: [
+      elb_app,
+      image_builder_app
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '3c'
+      ACTION: 'd'
+    secrets: inherit
+      
+  rds_app:
+    needs: [
+      elb_app, 
+      image_builder_app
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '3b'
+      ACTION: 'd'
+    secrets: inherit
+
+  bastion_vpc_app:
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '3a'
+      ACTION: 'd'
+    secrets: inherit
+
+  acm_app:
+    needs: [
+      elb_app
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '2c'
+      ACTION: 'd'
+    secrets: inherit
+
+  vpc_network:
+    needs: [
+      deploy_app,
+      vpc_endpoint_codedeploy, vpc_endpoint_s3, vpc_endpoint_ssm,
+      elb_app, 
+      image_builder_app,
+      efs_app, rds_app, bastion_vpc_app
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '2a'
+      ACTION: 'd'
+    secrets: inherit
+
+  github_sync:
+    needs: [
+      deploy_app,
+      vpc_endpoint_codedeploy, vpc_endpoint_s3, vpc_endpoint_ssm,
+      elb_app,
+      ami_app,
+      image_builder_app,
+      bastion_vpc_app,
+      rds_app, efs_app,
+      vpc_network, acm_app
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '1a'
+      ACTION: 'd'
+    secrets: inherit

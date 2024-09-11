@@ -1,0 +1,41 @@
+#!/bin/bash
+echo "### Iniciado user data ###"
+
+# Linux update
+ apt-get update
+
+# Instalar pré-requisitos
+apt-get install -y unzip
+
+# Instalar AWS CLI
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+
+# Recuperar chave privada do AWS Secrets Manager
+PARAMETER_NAME="/github_secrets/ec2_ssh_private_key"
+
+# Obter a chave privada do Secrets Manager
+PRIVATE_KEY=$(aws ssm get-parameter --name $PARAMETER_NAME --region ${REGION} --with-decryption --query "Parameter.Value" --output text)
+
+# Adicionar chave privada
+echo "$PRIVATE_KEY" > /home/ubuntu/.ssh/rsa.key
+chmod 600 /home/ubuntu/.ssh/rsa.key
+
+# Configurar o ssh-agent para rodar em background
+eval "$(ssh-agent -s)"
+
+# Adicionar a chave SSH ao ssh-agent
+ssh-add /home/ubuntu/.ssh/rsa.key
+
+# Fazer o ssh-add persistir entre reinicializações (opcional)
+echo 'eval "$(ssh-agent -s)"' >> /home/ubuntu/.bashrc
+echo 'ssh-add /home/ubuntu/.ssh/rsa.key' >> /home/ubuntu/.bashrc
+
+# Configurar permissões corretas
+chown ubuntu:ubuntu /home/ubuntu/.ssh/rsa.key
+
+echo "### Finalizado user data ###"
+
+# Informa fim do user data para autorizar Terraform a prosseguir instalação.
+touch /tmp/userdata_finished

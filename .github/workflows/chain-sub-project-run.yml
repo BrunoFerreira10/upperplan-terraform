@@ -1,0 +1,113 @@
+name: "S1 - Sub-project: Chained Run"
+run-name: "S1 - Sub-project: Chained Run (${{inputs.RESOURCE}}): ${{inputs.ACTION == 'd' && 'Destroy' || 'Create'}}"
+
+on: 
+  workflow_dispatch:
+    inputs:
+      RESOURCE:
+        required: true
+        type: string
+        description: "Resource Id. ex: 2a, 2c, 3a"      
+      ACTION:
+        required: false
+        type: string
+        description: "d = Destroy | Outros = Create"
+      CONFIRMATION:
+        required: true
+        type: string
+        description: "Vazio aborta. Qualquer valor confirma."
+
+jobs:
+  ################################# 
+  ######## Create project #########
+  #################################
+  create-secret-manager:
+    if: ${{ inputs.ACTION != 'd' }}
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '1b'
+      ACTION: ${{ inputs.ACTION }}
+    secrets: inherit
+  
+  create-vpc-network:
+    if: ${{ inputs.ACTION != 'd' }}
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '2a'
+      ACTION: ${{ inputs.ACTION }}
+    secrets: inherit
+
+  create-baston-host:
+    needs: [create-vpc-network, create-secret-manager]
+    if: ${{ inputs.ACTION != 'd' }}
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '3a'
+      ACTION: ${{ inputs.ACTION }}
+    secrets: inherit
+
+  create-ec2-setup:
+    needs: [create-vpc-network, create-secret-manager]
+    if: ${{ inputs.ACTION != 'd' }}
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '4a'
+      ACTION: ${{ inputs.ACTION }}
+    secrets: inherit
+
+  create-ami-setup:
+    needs: [create-ec2-setup]
+    if: ${{ inputs.ACTION != 'd' }}
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '4b'
+      ACTION: ${{ inputs.ACTION }}
+    secrets: inherit
+   
+  #################################
+  ######## Destroy project ########
+  #################################
+
+  destroy-ami-setup:
+    if: ${{ inputs.ACTION == 'd' }}
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '4b'
+      ACTION: ${{ inputs.ACTION }}
+    secrets: inherit
+
+  destroy-ec2-setup:
+    needs: [destroy-ami-setup]
+    if: ${{ inputs.ACTION == 'd' }}
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '4a'
+      ACTION: ${{ inputs.ACTION }}
+    secrets: inherit
+
+  destroy-baston-host:
+    if: ${{ inputs.ACTION == 'd' }}
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '3a'
+      ACTION: ${{ inputs.ACTION }}
+    secrets: inherit
+
+  destroy-vpc-network:
+    needs: [destroy-ec2-setup, destroy-baston-host]
+    if: ${{ inputs.ACTION == 'd' }}
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '2a'
+      ACTION: ${{ inputs.ACTION }}
+    secrets: inherit
+
+  destroy-secret-manager:
+    needs: [destroy-ec2-setup, destroy-baston-host]
+    if: ${{ inputs.ACTION == 'd' }}
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '1b'
+      ACTION: ${{ inputs.ACTION }}
+    secrets: inherit
+  

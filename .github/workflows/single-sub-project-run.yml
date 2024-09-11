@@ -1,0 +1,120 @@
+name: "S2 - Sub-project: Single Run"
+run-name: "S2 - Sub-project: Single Run (${{inputs.RESOURCE}}): ${{inputs.ACTION == 'd' && 'Destroy' || 'Create'}}"
+
+on: 
+  workflow_dispatch:
+    inputs:
+      RESOURCE:
+        required: true
+        type: string
+        description: "Resource Id. ex: 2a, 2c, 3a"
+      ACTION:
+        required: false
+        type: string
+        description: "d = Destroy | Outros = Create"
+      CONFIRMATION:
+        required: true
+        type: string
+        description: "Vazio aborta. Qualquer valor confirma."
+  workflow_call:
+    inputs:
+      RESOURCE:
+        required: true
+        type: string
+        description: "Resource Id. ex: 2a, 2c, 3a"
+      ACTION:
+        required: false
+        type: string
+        description: "d = Destroy | Outros = Create"
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ vars.IAM_AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.IAM_AWS_SECRET_ACCESS_KEY }}  
+
+jobs:
+  action:    
+    name: "${{inputs.ACTION == 'd' && 'destroy' || 'create'}} (${{inputs.RESOURCE}})"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Definir permissões dos scripts
+        id: setup-script-rights
+        run: |
+          chmod +x ./.github/scripts/setup-scripts-rights.sh
+          ./.github/scripts/setup-scripts-rights.sh
+
+      - name: Process Inputs
+        id: process-inputs
+        run: ./.github/scripts/single-sub-project-process-inputs.sh \
+            '${{ inputs.RESOURCE}}' '${{ inputs.ACTION }}'
+            # script-outputs
+            # SELECTED_ACTION
+            # ACTION_LABEL
+            # SUB_PROJECT_NAME
+            # LOCAL_FOLDER
+
+      - name: Ler configurações project-vars.ini
+        id: read-project-vars
+        run: ./.github/scripts/read-project-vars-ini.sh \
+             '${{steps.process-inputs.outputs.LOCAL_FOLDER}}' \
+             '${{steps.process-inputs.outputs.SUB_PROJECT_NAME}}' \
+             '${{toJson(vars)}}'
+        
+      - name: Set up SSH agent
+        if: ${{ steps.read-project-vars.outputs.USE_SSH == 'true' }}
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+
+      - name: Setup Providers
+        run: ./.github/scripts/setup-providers.sh \
+              "${{ steps.process-inputs.outputs.LOCAL_FOLDER }}" \
+              "${{ vars.GENERAL_REGION }}" \
+              "${{ vars.GENERAL_TAG_AUTHOR }}" \
+              "${{ vars.GENERAL_TAG_CUSTOMER }}" \
+              "${{ vars.GENERAL_TAG_PROJECT }}"
+
+      - name: Setup Backend
+        if: ${{ steps.read-project-vars.outputs.USE_BACKEND == 'true' }}
+        run: ./.github/scripts/setup-backend.sh \
+             "${{ steps.process-inputs.outputs.LOCAL_FOLDER }}" \
+             "${{ vars.GENERAL_REGION }}" \
+             "${{ vars.GENERAL_PROJECT_BUCKET_NAME }}" \
+             "${{ steps.process-inputs.outputs.SUB_PROJECT_NAME }}"
+
+      # Terraform Init
+      - name: Run Terraform Init without backend
+        if: ${{ steps.read-project-vars.outputs.USE_BACKEND != 'true' }}
+        run: |
+          cd "./${{ steps.process-inputs.outputs.LOCAL_FOLDER }}"
+          terraform init
+
+      - name: Run Terraform Init with backend
+        if: ${{ steps.read-project-vars.outputs.USE_BACKEND == 'true' }}
+        run: |
+          cd "./${{ steps.process-inputs.outputs.LOCAL_FOLDER }}"
+          terraform init -backend-config=./backend.tfvars
+
+      # Terraform action (apply ou destroy)
+      
+      # Usado para todos os sub-projetos, exceto Secrets Manager
+      - name: Run Terraform ${{ steps.process-inputs.outputs.SELECTED_ACTION }}
+        if: ${{ steps.process-inputs.outputs.SUB_PROJECT_NAME != 'github_sync' }}
+        run: |
+          cd "./${{ steps.process-inputs.outputs.LOCAL_FOLDER }}"
+          cat ./variables.tfvars
+          terraform ${{ steps.process-inputs.outputs.SELECTED_ACTION }} -auto-approve \
+            -var-file=./variables.tfvars
+
+      # Usado apenas no sub-projeto Secrets Manager
+      - name: Run Terraform ${{ steps.process-inputs.outputs.SELECTED_ACTION }} - Github Sync SSM
+        if: ${{ steps.process-inputs.outputs.SUB_PROJECT_NAME == 'github_sync' }}
+        run: |
+          cd "./${{ steps.process-inputs.outputs.LOCAL_FOLDER }}"
+          cat ./variables.tfvars
+          terraform ${{ steps.process-inputs.outputs.SELECTED_ACTION }} -auto-approve \
+            -var-file=./variables.tfvars \
+            '-var=github_secrets=${{ toJson(secrets) }}' \
+            '-var=github_vars=${{ toJson(vars) }}'

@@ -1,0 +1,116 @@
+#!/bin/bash
+## --------------------------------------------------------------------------------------------------------------------
+## Use data start
+## --------------------------------------------------------------------------------------------------------------------
+echo "#### Iniciado user data ####"
+
+## --------------------------------------------------------------------------------------------------------------------
+## Update /etc/fstab and mount filesystems
+## --------------------------------------------------------------------------------------------------------------------
+echo "#### Montagem do sistema de arquivos EFS ####"
+echo "${EFS_DNS_NAME}:/ /var/www/html efs defaults,_netdev 0 0" >> /etc/fstab
+mount -a
+
+## --------------------------------------------------------------------------------------------------------------------
+## Download git repository to /tmp/app
+## --------------------------------------------------------------------------------------------------------------------
+echo "#### Iniciando ssh-agent ####"
+eval $(ssh-agent -s)
+
+echo "#### Adicionando chave privada do github ao ssh-agent ####"
+mkdir /tmp/github
+PRIVATE_KEY=$(aws ssm get-parameter --name '/github_secrets/ssh_private_key_github' --with-decryption --query 'Parameter.Value' --output text)
+echo "$PRIVATE_KEY" > /tmp/gitkey/github_ssh_key
+chmod 600 /tmp/gitkey/github_ssh_key
+ssh-add /tmp/gitkey/github_ssh_key
+rm -rf /tmp/gitkey
+
+echo "#### Criando pasta temporatia /tmp/app ####"
+mkdir /tmp/app
+cd /tmp/app
+
+echo "#### Definindo env HOME ####"
+export HOME="/root"
+
+echo "#### Configurando /tmp/app com um diretório seguro para o git. ####"
+git config --global --add safe.directory /tmp/app
+
+echo "#### Inicializando repositório git ####"
+git init
+
+echo "#### Adicionando remote 'origin': ${APP_REPOSITORY_URL} ####"
+git remote add origin ${APP_REPOSITORY_URL}
+
+echo "#### Excutando git fetch. ####"
+GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no' git fetch origin
+
+echo "#### Executando git reset --hard para origin/master ####"
+git reset --hard origin/master
+
+## --------------------------------------------------------------------------------------------------------------------
+## Setup Easy Appointments on /tmm/app
+## --------------------------------------------------------------------------------------------------------------------
+cd /tmp/app
+cp /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak
+cp -f ./nginx.conf /etc/nginx/sites-available/default
+
+echo "#### Define permissões para 'storage' ####"
+chmod a+rwx ./storage
+
+echo "#### Configura arquivo 'config-sample.php' e 'config.php' ####"
+sed -i "s|const BASE_URL = '.*';|const BASE_URL = '${DOMAIN}';|" config-sample.php
+sed -i "s|const DB_HOST = '.*';|const DB_HOST = '${DB_HOST}';|" config-sample.php
+sed -i "s|const DB_NAME = '.*';|const DB_NAME = '${DB_NAME}';|" config-sample.php
+sed -i "s|const DB_USERNAME = '.*';|const DB_USERNAME = '${DB_USERNAME}';|" config-sample.php
+sed -i "s|const DB_PASSWORD = '.*';|const DB_PASSWORD = '${DB_PASSWORD}';|" config-sample.php
+
+echo "#### Executando composer install ####"
+# sudo -u www-data composer install
+composer install -n
+
+echo "#### Executando npm install ####"
+# sudo -u www-data npm install
+npm install
+
+echo "#### Executando npm run build ####"
+# sudo -u www-data npm run build
+npm run build
+
+echo "#### Renomeia arquivo config-sample.php ####"
+# sudo -u www-data cp config-sample.php config.php
+mv /tmp/app/build/config-sample.php /tmp/app/build/config.php
+echo ${MEU_TESTE} > meu_teste.conf
+
+## --------------------------------------------------------------------------------------------------------------------
+## Move build to /var/www/html
+## --------------------------------------------------------------------------------------------------------------------
+cd /var/www/html
+
+echo "#### Alterando owner do diretório /tmp/app para www-data ####"
+chown -R www-data:www-data /var/www/html
+
+echo "#### Apagando dados de /var/www/html ####"
+shopt -s dotglob
+rm -rf /var/www/html/*
+shopt -u dotglob
+
+echo "#### Move pasta build ####"
+chown -R www-data:www-data /tmp/app/build
+mv /tmp/app/build/* /var/www/html
+
+## --------------------------------------------------------------------------------------------------------------------
+## PHP and NGINX reload and restart
+## --------------------------------------------------------------------------------------------------------------------
+systemctl stop apache2
+sleep 3
+systemctl daemon-reload
+systemctl restart php8.3-fpm.service
+systemctl restart nginx
+
+## --------------------------------------------------------------------------------------------------------------------
+## Create finish flag files on /tmp/userdata_finished
+## This file is read by terraform remote exec and sinalize that user data is finished
+## and terraform scripts com follow.
+## --------------------------------------------------------------------------------------------------------------------
+echo "#### Finalizado user data ####"
+sudo -u ubuntu touch /tmp/userdata_finished

@@ -1,0 +1,10 @@
+upstream fastcgi_backend {
+  server unix:/run/php/php8.3-fpm.sock;
+}
+
+server {
+  listen 80;
+  server_name www.${DOMAIN};
+  set \$MAGE_ROOT /var/www/magento2;
+  include /var/www/magento2/nginx.conf.sample;
+}

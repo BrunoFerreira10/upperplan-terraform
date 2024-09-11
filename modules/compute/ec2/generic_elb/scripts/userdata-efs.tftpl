@@ -1,0 +1,32 @@
+#!/bin/bash
+## --------------------------------------------------------------------------------------------------------------------
+## Use data start
+## --------------------------------------------------------------------------------------------------------------------
+echo "#### Iniciado user data ####"
+
+## --------------------------------------------------------------------------------------------------------------------
+## Update /etc/fstab and mount filesystems
+## --------------------------------------------------------------------------------------------------------------------
+echo "#### Montagem do sistema de arquivos EFS ####"
+echo "${EFS_DNS_NAME}:/ /var/www/html efs defaults,_netdev 0 0" >> /etc/fstab
+mount -a
+
+sleep 5
+## --------------------------------------------------------------------------------------------------------------------
+## PHP and NGINX reload and restart
+## --------------------------------------------------------------------------------------------------------------------
+systemctl stop apache2
+sleep 3
+systemctl daemon-reload
+systemctl restart php8.3-fpm.service
+systemctl restart nginx
+
+echo ${MEU_TESTE} > /tmp/meu_teste.conf
+
+## --------------------------------------------------------------------------------------------------------------------
+## Create finish flag files on /tmp/userdata_finished
+## This file is read by terraform remote exec and sinalize that user data is finished
+## and terraform scripts com follow.
+## --------------------------------------------------------------------------------------------------------------------
+echo "#### Finalizado user data ####"
+sudo -u ubuntu touch /tmp/userdata_finished
