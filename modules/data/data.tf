@@ -10,7 +10,7 @@ data "aws_ssm_parameters_by_path" "github_vars" {
 locals {
   names_split = [
     for name in data.aws_ssm_parameters_by_path.github_vars.names :
-    split("/", substr(name, 1, -1))[1]
+    split("/", substr(name, 1, -1))[3]
   ]
 
   github_vars = zipmap(
