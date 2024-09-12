@@ -24,11 +24,11 @@ output "vpc" {
           cidr_block = aws_subnet.public_az_b.cidr_block
           az         = aws_subnet.public_az_b.availability_zone
         }
-        az_c = {
-          id         = aws_subnet.public_az_c.id
-          cidr_block = aws_subnet.public_az_c.cidr_block
-          az         = aws_subnet.public_az_c.availability_zone
-        }
+        # az_c = {
+        #   id         = aws_subnet.public_az_c.id
+        #   cidr_block = aws_subnet.public_az_c.cidr_block
+        #   az         = aws_subnet.public_az_c.availability_zone
+        # }
       }
       private = {
         az_a = {
@@ -41,11 +41,11 @@ output "vpc" {
           cidr_block = aws_subnet.private_az_b.cidr_block
           az         = aws_subnet.private_az_b.availability_zone
         }
-        az_c = {
-          id         = aws_subnet.private_az_c.id
-          cidr_block = aws_subnet.private_az_c.cidr_block
-          az         = aws_subnet.private_az_c.availability_zone
-        }
+        # az_c = {
+        #   id         = aws_subnet.private_az_c.id
+        #   cidr_block = aws_subnet.private_az_c.cidr_block
+        #   az         = aws_subnet.private_az_c.availability_zone
+        # }
       }
     }
   }

@@ -10,9 +10,8 @@ module "rds_mysql" {
     ssm_parameter_db_password = "rds_1_db_password",
     instance_class            = "db.t3.micro"
     subnet_ids = [
-      module.data.projects.vpc_app.vpc.subnets.private.az_a.id,
-      module.data.projects.vpc_app.vpc.subnets.private.az_b.id,
-      module.data.projects.vpc_app.vpc.subnets.private.az_c.id
+      for subnet in module.data.projects.vpc_app.vpc.subnets.private :
+      subnet.id
     ]
   }
   sg_rds_rules     = {
