@@ -44,6 +44,7 @@ resource "aws_iam_policy" "ecr_push" {
           "ecr:CompleteLayerUpload",
           "ecr:UploadLayerPart",
           "ecr:GetAuthorizationToken",
+          "ecr:InitiateLayerUpload",
           "logs:*",
           "s3:*"
         ],
