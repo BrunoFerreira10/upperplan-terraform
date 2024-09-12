@@ -18,11 +18,11 @@ echo "#### Iniciando ssh-agent ####"
 eval $(ssh-agent -s)
 
 echo "#### Adicionando chave privada do github ao ssh-agent ####"
-mkdir /tmp/github
-PRIVATE_KEY=$(aws ssm get-parameter --name '/github_secrets/ssh_private_key_github' --with-decryption --query 'Parameter.Value' --output text)
-echo "$PRIVATE_KEY" > /tmp/gitkey/github_ssh_key
-chmod 600 /tmp/gitkey/github_ssh_key
-ssh-add /tmp/gitkey/github_ssh_key
+mkdir /tmp/${var.shortname}/prod/github
+PRIVATE_KEY=$(aws ssm get-parameter --name '/${var.shortname}/prod/github_secrets/ssh_private_key_github' --with-decryption --query 'Parameter.Value' --output text)
+echo "$PRIVATE_KEY" > /tmp/gitkey/${var.shortname}/prod/github_ssh_key
+chmod 600 /tmp/gitkey/${var.shortname}/prod/github_ssh_key
+ssh-add /tmp/gitkey/${var.shortname}/prod/github_ssh_key
 rm -rf /tmp/gitkey
 
 echo "#### Criando pasta temporatia /tmp/app ####"

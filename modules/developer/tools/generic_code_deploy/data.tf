@@ -9,5 +9,5 @@ data "aws_codestarconnections_connection" "github_app_connection" {
 }
 
 data "aws_ssm_parameter" "db_password" {
-  name = "/github_secrets/${var.rds.ssm_parameter_db_password}"
+  name = "/${var.shortname}/prod/github_secrets/${var.rds.ssm_parameter_db_password}"
 }

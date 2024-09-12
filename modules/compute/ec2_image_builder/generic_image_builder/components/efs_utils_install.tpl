@@ -8,7 +8,7 @@ phases:
               mkdir /tmp/efs
               cd /tmp/efs
               apt-get -y install git binutils rustc cargo pkg-config libssl-dev
-              git clone https://github.com/aws/efs-utils
+              git clone https://${var.shortname}/prod/github.com/aws/efs-utils
               cd efs-utils
               ./build-deb.sh
               apt-get -y install ./build/amazon-efs-utils*deb

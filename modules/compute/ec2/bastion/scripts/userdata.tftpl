@@ -13,7 +13,7 @@ unzip awscliv2.zip
 sudo ./aws/install
 
 # Recuperar chave privada do AWS Secrets Manager
-PARAMETER_NAME="/github_secrets/ec2_ssh_private_key"
+PARAMETER_NAME="/${var.shortname}/prod/github_secrets/ec2_ssh_private_key"
 
 # Obter a chave privada do Secrets Manager
 PRIVATE_KEY=$(aws ssm get-parameter --name $PARAMETER_NAME --region ${REGION} --with-decryption --query "Parameter.Value" --output text)

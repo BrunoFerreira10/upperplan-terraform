@@ -2,7 +2,7 @@
 ## Github Varibles - Only unsecure values
 ## --------------------------------------------------------------------------------------------------------------------
 data "aws_ssm_parameters_by_path" "github_vars" {
-  path            = "/github_vars"
+  path            = "/${var.shortname}/prod/github_vars"
   recursive       = true
   with_decryption = true
 }

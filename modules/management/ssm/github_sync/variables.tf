@@ -1,3 +1,7 @@
+variable "shortname" {
+  type = string
+}
+
 variable "github_secrets" {
   type = map(string)
 }

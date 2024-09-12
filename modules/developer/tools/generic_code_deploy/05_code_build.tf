@@ -64,7 +64,7 @@ resource "aws_codebuild_project" "this" {
 
   source {
     type            = "GITHUB"
-    location        = var.app_repository_url_https // "https://github.com/your-repo-url.git"
+    location        = var.app_repository_url_https // "https://${var.shortname}/prod/github.com/your-repo-url.git"
     git_clone_depth = 1
     buildspec = local.buildspec
   }
