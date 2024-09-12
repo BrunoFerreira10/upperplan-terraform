@@ -8,14 +8,9 @@ variable "shortname" {
   description = "Nome curto para identificação dos recursos na AWS"
 }
 
-variable "router_table" {
+variable "public_subnet" {
   type        = any
-  description = "Route table for NAT Gateway allocation."
-}
-
-variable "subnets" {
-  type        = map(any)
-  description = "Subnet for NAT Gateway allocation."  
+  description = "Public subnet for NAT Gateway allocation."  
 }
 
 variable "vpc" {
