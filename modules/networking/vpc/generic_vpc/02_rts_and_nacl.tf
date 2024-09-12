@@ -25,11 +25,6 @@ resource "aws_route_table" "public" {
 resource "aws_route_table" "private" {
   vpc_id = aws_vpc.this.id
 
-  route { # USER DATA
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.this.id
-  }
-
   tags = {
     Name = "rt_private_app_${var.shortname}"
   }
