@@ -5,3 +5,7 @@ variable "github_secrets" {
 variable "github_vars" {
   type = map(string)
 }
+
+variable "general_tag_shortname" {
+  type = string
+}
