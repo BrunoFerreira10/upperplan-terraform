@@ -1,5 +1,5 @@
 ## --------------------------------------------------------------------------------------------------------------------
-## ECR Role
+## Codebuild ECR Push Role
 ## --------------------------------------------------------------------------------------------------------------------
 
 ## Policies
@@ -14,11 +14,13 @@ resource "aws_iam_policy" "ecr_push" {
       {
         "Effect" : "Allow",
         "Action" : [
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:CompleteLayerUpload",
           "ecr:GetDownloadUrlForLayer",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:PutImage",
+          "ecr:CompleteLayerUpload",
           "ecr:UploadLayerPart",
-          "ecr:PutImage"
+          "logs:*",
+          "s3:*"
         ],
         "Resource" : "*"
       }
