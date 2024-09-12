@@ -24,7 +24,7 @@ resource "aws_codebuild_project" "ecr" {
     type            = "GITHUB"
     location        = var.app_repository_url_https
     git_clone_depth = 1
-    buildspec       = templatefile("${path.module}/buildspec.yml.tpl", { 
+    buildspec       = templatefile("${path.module}/files/buildspec.yml.tpl", { 
       REGION = var.region,
       REPOSITORY_URI = aws_ecr_repository.this.repository_url
     })
