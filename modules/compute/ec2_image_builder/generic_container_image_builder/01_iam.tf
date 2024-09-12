@@ -28,7 +28,7 @@ resource "aws_iam_policy" "ecr_push" {
   })
 
   tags = {
-    Name = self.name
+    Name = "Prod-ECRPush-${var.shortname}-${var.region}"
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_iam_role" "codebuild" {
   })
 
   tags = {
-    Name = self.name
+    Name = "prod-ecr-push-${var.shortname}"
   }
 }
 

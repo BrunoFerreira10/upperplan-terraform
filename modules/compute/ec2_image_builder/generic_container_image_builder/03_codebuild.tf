@@ -8,7 +8,7 @@ resource "aws_codebuild_source_credential" "this" {
 
 resource "aws_codebuild_project" "ecr" {
   name          = "${var.shortname}-container-image-build"
-  service_role  = aws_iam_role.codebuild_role.arn
+  service_role  = aws_iam_role.codebuild.arn
   artifacts {
     type = "NO_ARTIFACTS"
   }
@@ -24,7 +24,7 @@ resource "aws_codebuild_project" "ecr" {
     type            = "GITHUB"
     location        = var.app_repository_url_https
     git_clone_depth = 1
-    buildspec       = templatefile("buildspec.yml.tpl", { 
+    buildspec       = templatefile("${path.module}/buildspec.yml.tpl", { 
       REGION = var.region,
       REPOSITORY_URI = aws_ecr_repository.this.repository_url
     })
