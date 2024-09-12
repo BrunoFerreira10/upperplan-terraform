@@ -27,7 +27,7 @@ module "rds_mysql" {
 module "save_parameter_rds_1_db_host" {
   source = "../modules/management/ssm/generic_save_parameter"
   is_secure = false
-  param_name = "/app_vars/rds_1_db_host"
+  param_name = "/${var.general_tag_shortname}/prod/app_vars/rds_1_db_host"
   param_value = module.rds_mysql.rds.private_ip
 
   depends_on = [ module.rds_mysql ]
