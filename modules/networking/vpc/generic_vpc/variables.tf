@@ -11,6 +11,7 @@ variable "shortname" {
 variable "vpc_settings" {
   description = "Configurações da VPC."
   type = object({
+    cidr_block = string,
     nacl_rules = map(object({
       # ingress = map(any)
       ingress = map(object({

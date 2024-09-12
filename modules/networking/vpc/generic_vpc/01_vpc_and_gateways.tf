@@ -2,7 +2,7 @@
 ## VPC Definition 
 ## -----------------------------------------------------------------------------
 resource "aws_vpc" "this" {
-  cidr_block           = "10.1.0.0/16"
+  cidr_block           = "${var.vpc_settings.cidr_block}/16"
   enable_dns_hostnames = true
   enable_dns_support   = true
 

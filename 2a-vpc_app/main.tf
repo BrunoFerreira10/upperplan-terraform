@@ -3,6 +3,7 @@ module "vpc_app" {
   shortname = module.data.github_vars.general_tag_shortname
   region    = module.data.github_vars.general_region
   vpc_settings = {
+    cidr_block = "10.2.0.0",
     nacl_rules = {
       public = {
         ingress = {
