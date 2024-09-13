@@ -13,6 +13,6 @@ module "ecs_service_app" {
     }
   }
   shortname    = module.data.github_vars.general_tag_shortname
-  target_group = module.data.projects.elb_add.target_group
+  target_group = module.data.projects.elb_app.target_groups.blue
   vpc          = module.data.projects.vpc_app.vpc
 }
