@@ -1,5 +1,6 @@
 module "ecs_service_app" {
   source = "../modules/containers/ecs/generic_ecs_service"
+  ecr_repository = module.data.projects.container_image_builder_app.ecr.repository
   region = module.data.github_vars.general_region
   sg_ecs_service_rules = {
     ingress = {
@@ -13,5 +14,5 @@ module "ecs_service_app" {
   }
   shortname    = module.data.github_vars.general_tag_shortname
   target_group = module.data.projects.elb_add.target_group
-  vpc          = module.data.vpc_app.vpc
+  vpc          = module.data.projects.vpc_app.vpc
 }

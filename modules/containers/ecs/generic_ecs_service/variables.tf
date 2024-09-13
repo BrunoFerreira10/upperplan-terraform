@@ -1,3 +1,8 @@
+variable "ecr_repository" {
+  description = "ECR repository"
+  type = any
+}
+
 variable "region" {
   description = "Região onde a infraestrutura será criada."
   type        = string

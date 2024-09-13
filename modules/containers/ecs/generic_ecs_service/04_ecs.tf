@@ -7,7 +7,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       essential = true,
-      image     = "${module.ecr.repository.repository_url}:latest",
+      image     = "${var.ecr_repository.repository_url}:latest",
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -16,7 +16,7 @@ resource "aws_ecs_task_definition" "this" {
           awslogs-stream-prefix = "ecs"
         }
       }
-      name = "${module.ecr.repository.name}"
+      name = "container-${var.shortname}"
       portMappings = [
         {
           containerPort = 80
@@ -112,7 +112,7 @@ resource "aws_ecs_service" "this" {
 resource "aws_appautoscaling_target" "this" {
   max_capacity       = 2
   min_capacity       = 1
-  resource_id        = "service/${aws_ecs_cluster.this.id}/${aws_ecs_service.service.name}"
+  resource_id        = "service/${aws_ecs_cluster.this.id}/${aws_ecs_service.this.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 }
