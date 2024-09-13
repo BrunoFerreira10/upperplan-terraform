@@ -67,7 +67,7 @@ resource "aws_ecs_service" "this" {
       for subnet in var.vpc.subnets.private :
       subnet.id
     ]
-    security_groups  = ["${module.sg_ecs.security-group.id}"]
+    security_groups  = ["${module.sg_ecs.security_group.id}"]
     assign_public_ip = false
   }
 
