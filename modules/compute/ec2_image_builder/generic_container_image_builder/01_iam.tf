@@ -58,7 +58,7 @@ resource "aws_iam_policy" "ecr_push" {
   }
 }
 
-## -- Attach policies to roles -----------------------------------------------------------------------------------------
+## -- Role -------------------------------------------------------------------------------------------------------------
 resource "aws_iam_role" "codebuild" {
   name = "prod-ecr-push-${var.shortname}"
 
@@ -90,6 +90,78 @@ resource "aws_iam_role_policy_attachment" "connections_to_codebuild" {
 resource "aws_iam_role_policy_attachment" "ecr_push_to_codebuild" {
   policy_arn = aws_iam_policy.ecr_push.arn
   role       = aws_iam_role.codebuild.name
+}
+
+## ---------------------------------------------------------------------------------------------------------------------
+## Codebuild ECR Push Role
+## ---------------------------------------------------------------------------------------------------------------------
+
+## -- Policies ---------------------------------------------------------------------------------------------------------
+
+resource "aws_iam_policy" "ecs_deploy" {
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ecs:UpdateService",
+          "ecs:RegisterTaskDefinition",
+          "ecs:DescribeServices",
+          "ecs:DescribeTaskDefinition",
+          "ecs:ListTasks",
+          "ecs:StopTask",
+          "elasticloadbalancing:DeregisterTargets",
+          "elasticloadbalancing:RegisterTargets",
+          "elasticloadbalancing:DescribeTargetGroups",
+          "elasticloadbalancing:DescribeListeners",
+          "elasticloadbalancing:ModifyListener",
+          "cloudwatch:DescribeAlarms",
+          "cloudwatch:PutMetricAlarm",
+          "iam:PassRole"
+        ],
+        Resource = "*"
+      },
+      {
+        Effect = "Allow",
+        Action = [
+          "codedeploy:CreateDeployment",
+          "codedeploy:GetApplication",
+          "codedeploy:GetDeployment",
+          "codedeploy:RegisterApplicationRevision"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+
+## -- Role -------------------------------------------------------------------------------------------------------------
+
+resource "aws_iam_role" "codedeploy" {
+  name = "codedeploy-service-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Principal = {
+          Service = "codedeploy.amazonaws.com"
+        },
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+## -- Attach policies to roles -----------------------------------------------------------------------------------------
+
+resource "aws_iam_role_policy_attachment" "ecr_push_to_codebuild" {
+  policy_arn = aws_iam_policy.ecs_deploy.arn
+  role       = aws_iam_role.codedeploy.name
 }
 
 ## ---------------------------------------------------------------------------------------------------------------------

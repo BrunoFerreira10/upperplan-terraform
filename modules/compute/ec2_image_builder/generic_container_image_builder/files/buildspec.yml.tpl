@@ -20,7 +20,12 @@ phases:
       - echo "Fazendo push da imagem para o Amazon ECR"
       - docker push ${REPOSITORY_URI}:latest
       - echo "Build e push da imagem Docker concluídos com sucesso"
-# artifacts:
-#   files:
-#     - "**/*"
-#   discard-paths: no
+      - echo "Gerando aquivo zip do build do container"
+      - mkdir -p container-build
+      - ls -la
+      - rsync -av --exclude='container-build' ./ container-build/
+artifacts:
+  files:
+    - "**/*"
+  discard-paths: no
+  base-directory: "container-build"

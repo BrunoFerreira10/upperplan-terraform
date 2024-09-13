@@ -1,9 +1,9 @@
 output "elb" {
   description = "Load balancer"
-  value =  module.elb_app.elb
+  value =  aws_lb.this
 }
 
 output "target_group" {
   description = "Target group"
-  value = module.elb_app.target_group
+  value = aws_lb_target_group.this
 }

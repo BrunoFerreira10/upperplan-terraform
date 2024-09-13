@@ -15,3 +15,8 @@ variable "shortname" {
   description = "Nome curto para identificacao dos recursos"
   type        = string
 }
+
+variable "vpc" {
+  description = "VPC for ECR allocation"
+  type        = any  
+}
