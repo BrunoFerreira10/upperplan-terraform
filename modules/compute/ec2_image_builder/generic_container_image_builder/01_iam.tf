@@ -159,7 +159,7 @@ resource "aws_iam_role" "codedeploy" {
 
 ## -- Attach policies to roles -----------------------------------------------------------------------------------------
 
-resource "aws_iam_role_policy_attachment" "ecr_push_to_codebuild" {
+resource "aws_iam_role_policy_attachment" "ecr_deploy_to_codedeploy" {
   policy_arn = aws_iam_policy.ecs_deploy.arn
   role       = aws_iam_role.codedeploy.name
 }
