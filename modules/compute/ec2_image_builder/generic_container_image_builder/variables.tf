@@ -6,6 +6,11 @@ variable "github_connection_name" {
   type = string  
 }
 
+variable "lb_listeners" {
+  description = "Listeners for Blue/Green deployment"
+  type        = any
+}
+
 variable "project_bucket_name" {
   type = string  
 }

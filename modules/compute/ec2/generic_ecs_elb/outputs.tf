@@ -10,3 +10,11 @@ output "target_groups" {
     green = aws_lb_target_group.green
   }
 }
+
+output "lb_listeners" {
+  description = "Listener"
+  value = {
+    http = aws_lb_listener.http,
+    https = aws_lb_listener.https
+  }  
+}
