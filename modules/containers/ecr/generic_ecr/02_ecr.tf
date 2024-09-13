@@ -24,10 +24,12 @@ data "aws_ecr_lifecycle_policy_document" "this" {
 
     selection {
       tag_status      = "untagged"
-      tag_prefix_list = ["prod"]
-      count_type      = "sinceImagePushed"
-      count_unit      = "days"
-      count_number    = 15
+      # tag_prefix_list = ["prod"]
+      # count_type      = "sinceImagePushed"
+      # count_unit      = "days"
+      # count_number    = 15
+      count_type = "imageCountMoreThan"
+      count_number = 3
     }
 
     action {
