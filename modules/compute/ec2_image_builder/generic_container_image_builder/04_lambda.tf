@@ -9,7 +9,7 @@ data "archive_file" "this" {
 }
 
 resource "aws_lambda_function" "codedeploy_trigger_lambda" {  
-  function_name = "CodeDeployTriggerLambda"
+  function_name = "CodeDeployTriggerLambda-${var.shortname}"
   role          = aws_iam_role.lambda_codedeploy_role.arn
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.9"
