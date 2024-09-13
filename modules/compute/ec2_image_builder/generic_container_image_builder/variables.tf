@@ -6,6 +6,10 @@ variable "github_connection_name" {
   type = string  
 }
 
+variable "project_bucket_name" {
+  type = string  
+}
+
 variable "region" {
   description = "Região onde a infraestrutura será criada."
   type        = string
