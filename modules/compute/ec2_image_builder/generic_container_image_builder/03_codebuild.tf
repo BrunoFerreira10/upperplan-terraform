@@ -6,6 +6,25 @@ resource "aws_codebuild_source_credential" "this" {
   token       = data.aws_codestarconnections_connection.github_app_connection.arn
 }
 
+## --------------------------------------------------------------------------------------------------------------------
+## Webhooks - Qual evento no repositorio dispara o codebuild.
+## --------------------------------------------------------------------------------------------------------------------
+resource "aws_codebuild_webhook" "this" {
+  project_name = aws_codebuild_project.ecr.name
+  build_type   = "BUILD"
+  filter_group {
+    filter {
+      type    = "EVENT"
+      pattern = "PUSH"
+    }
+
+    filter {
+      type    = "HEAD_REF"
+      pattern = "master"
+    }
+  }
+}
+
 resource "aws_codebuild_project" "ecr" {
   name          = "${var.shortname}-container-image-build"
   service_role  = aws_iam_role.codebuild.arn
