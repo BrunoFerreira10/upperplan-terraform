@@ -1,3 +1,7 @@
+## ---------------------------------------------------------------------------------------------------------------------
+## Application Load Balancer
+## ---------------------------------------------------------------------------------------------------------------------
+
 resource "aws_lb" "this" {
   name               = replace("elb-${var.shortname}","_","-")
   internal           = false
@@ -36,7 +40,7 @@ resource "aws_lb_listener" "http" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.this.arn
+    target_group_arn = aws_lb_target_group.blue.arn
   }
 
   tags = {
@@ -53,7 +57,7 @@ resource "aws_lb_listener" "https" {
 
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.this.arn
+    target_group_arn = aws_lb_target_group.blue.arn
   }
 
   tags = {
@@ -61,3 +65,4 @@ resource "aws_lb_listener" "https" {
   }
 }
 
+## ---------------------------------------------------------------------------------------------------------------------

@@ -4,4 +4,5 @@ module "container_image_builder_app" {
   github_connection_name   = module.data.github_vars.my_github_connection_name
   region                   = module.data.github_vars.general_region
   shortname                = module.data.github_vars.general_tag_shortname
+  target_groups            = module.data.projects.elb_app.target_groups  
 }

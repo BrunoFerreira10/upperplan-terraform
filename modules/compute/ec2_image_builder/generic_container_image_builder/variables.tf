@@ -16,7 +16,7 @@ variable "shortname" {
   type        = string
 }
 
-variable "vpc" {
-  description = "VPC for ECR allocation"
-  type        = any  
+variable "target_groups" {
+  description = "Target groups for Blue/Green deployment"
+  type        = any
 }

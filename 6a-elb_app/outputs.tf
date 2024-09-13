@@ -3,7 +3,7 @@ output "elb" {
   value =  module.elb_app.elb
 }
 
-output "target_group" {
-  description = "Target group"
-  value = module.elb_app.target_group
+output "target_groups" {
+  description = "Blue/Green target groups"
+  value = module.elb_app.target_groups
 }
