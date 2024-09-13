@@ -17,8 +17,13 @@ resource "aws_codebuild_source_credential" "this" {
 resource "aws_codebuild_project" "ecr" {
   name         = "${var.shortname}-app"
   service_role = aws_iam_role.codebuild.arn
+
   artifacts {
-    type = "NO_ARTIFACTS"
+    type      = "S3"
+    location  = var.project_bucket_name
+    name      = "container-build.zip"
+    path      = "code_deploy_outputs"
+    packaging = "ZIP"
   }
 
   environment {
