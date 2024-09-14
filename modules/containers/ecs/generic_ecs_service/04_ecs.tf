@@ -1,9 +1,13 @@
 ## ---------------------------------------------------------------------------------------------------------------------
-## ECS Tast Definition
+## ECS Task Definition
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_ecs_task_definition" "this" {
   family = "task-${var.shortname}"
+  runtime_platform {
+    cpu_architecture        = "X86_64"
+    operating_system_family = "LINUX"
+  }
   container_definitions = jsonencode([
     {
       essential = true,
@@ -11,12 +15,15 @@ resource "aws_ecs_task_definition" "this" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = "${module.logs.log_group.name}"
+          awslogs-group         = "${module.logs_tasks.log_group.name}"
           awslogs-region        = "${var.region}"
           awslogs-stream-prefix = "ecs"
         }
       }
-      name = "container-${var.shortname}"
+      name              = "container-${var.shortname}"
+      cpu               = 1024,
+      memory            = 2048,
+      memoryReservation = 1024,
       portMappings = [
         {
           containerPort = 80
@@ -30,10 +37,11 @@ resource "aws_ecs_task_definition" "this" {
 
   requires_compatibilities = ["FARGATE"]
 
-  execution_role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/ecsTaskExecutionRole"
+  task_role_arn      = aws_iam_role.ecs_task.arn
+  execution_role_arn = aws_iam_role.ecs_task_execution.arn
 
-  memory = "1024"
-  cpu    = "512"
+  memory = "2048"
+  cpu    = "1024"
 
   tags = {
     Name = "task-${var.shortname}"
@@ -45,7 +53,7 @@ resource "aws_ecs_task_definition" "this" {
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_ecs_cluster" "this" {
-  name = "cluster-${var.shortname}"  
+  name = "cluster-${var.shortname}"
 }
 
 ## ---------------------------------------------------------------------------------------------------------------------
@@ -56,14 +64,15 @@ resource "aws_ecs_service" "this" {
   name            = "service-${var.shortname}"
   cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.this.arn
-  launch_type     = "FARGATE"
+
+  launch_type = "FARGATE"
 
   desired_count                      = 1
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
 
   network_configuration {
-    subnets          = [
+    subnets = [
       for subnet in var.vpc.subnets.private :
       subnet.id
     ]

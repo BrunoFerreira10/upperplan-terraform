@@ -8,6 +8,8 @@ module "ecs_service_app" {
       HTTPS = { port = 443, cidr_ipv4 = "0.0.0.0/0" }
     },
     egress = {
+      HTTP  = { port = 80, cidr_ipv4 = "0.0.0.0/0" } // ECR
+      HTTPS = { port = 443, cidr_ipv4 = "0.0.0.0/0" } // ECR
       EFS   = { port = 2049 }
       MYSQL = { port = 3306 }
     }

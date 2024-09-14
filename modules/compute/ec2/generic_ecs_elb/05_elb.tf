@@ -3,7 +3,7 @@
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_lb" "this" {
-  name               = replace("elb-${var.shortname}","_","-")
+  name               = replace("elb-${var.shortname}", "_", "-")
   internal           = false
   load_balancer_type = "application"
   security_groups = [
@@ -23,11 +23,13 @@ resource "aws_lb" "this" {
   }
 }
 
+# Listener HTTP
 resource "aws_lb_listener" "http" {
   load_balancer_arn = aws_lb.this.arn
   port              = "80"
   protocol          = "HTTP"
 
+  # Desativando redirecionamento HTTPS por enquanto
   # default_action {
   #   type = "redirect"
 
@@ -48,6 +50,7 @@ resource "aws_lb_listener" "http" {
   }
 }
 
+# Listener HTTPS
 resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.this.arn
   port              = "443"

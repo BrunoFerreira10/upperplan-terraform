@@ -2,6 +2,7 @@
 ## Target Groups
 ## ---------------------------------------------------------------------------------------------------------------------
 
+# Target Group Azul
 resource "aws_lb_target_group" "blue" {
   name     = replace("tg-blue-${var.shortname}", "_", "-")
   port     = 80
@@ -25,6 +26,7 @@ resource "aws_lb_target_group" "blue" {
   }
 }
 
+# Target Group Verde
 resource "aws_lb_target_group" "green" {
   name     = replace("tg-green-${var.shortname}", "_", "-")
   port     = 80

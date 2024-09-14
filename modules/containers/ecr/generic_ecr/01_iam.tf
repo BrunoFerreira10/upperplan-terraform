@@ -31,6 +31,25 @@ data "aws_iam_policy_document" "this" {
   }
 }
 
+resource "aws_iam_policy" "ecs_task_policy" {
+  name = "ecs-task-policy-${var.shortname}"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:GetObject",
+          "s3:PutObject",
+          "s3:ListBucket"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}
+
 resource "aws_ecr_repository_policy" "this" {
   repository = aws_ecr_repository.this.name 
   policy     = data.aws_iam_policy_document.this.json

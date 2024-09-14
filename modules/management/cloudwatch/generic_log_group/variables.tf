@@ -1,15 +1,15 @@
 variable "name" {
-  description = "Name of the log group"
+  description = "Log group name"
   type        = string  
 }
 
 variable "retention_in_days" {
   description = "Retention in days for the log group"
   type        = number
-  default     = 1
+  default     = 3
 }
 
 variable "shortname" {
-  description = "Shortname for identification of resources in AWS"
-  type        = string  
+  description = "Shortname for the log group"
+  type        = string 
 }

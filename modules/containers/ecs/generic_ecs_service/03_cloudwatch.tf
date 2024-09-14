@@ -1,5 +1,5 @@
-module "logs" {
-  source = "../../../management/cloudwatch/generic_log"
-  name = "ecs_service"
+module "logs_tasks" {
+  source = "../../../management/cloudwatch/generic_log_group"
+  name = "/ecs/containers"
   shortname = var.shortname
 }
