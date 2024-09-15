@@ -24,7 +24,7 @@ phases:
       - echo "Gerando aquivo zip do build do container"
       - mkdir -p app-build
       - ls -la
-      - rsync -av --exclude='app-build' ./ app-build/
+      - cp appspec.yml app-build/
 artifacts:
   files:
     - "**/*"

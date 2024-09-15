@@ -7,7 +7,7 @@ resource "aws_codedeploy_app" "this" {
   compute_platform = "ECS"
 
   tags = {
-    Name        = "${var.shortname}-container-image-build"
+    Name        = "${var.shortname}-app"
   }
 }
 
