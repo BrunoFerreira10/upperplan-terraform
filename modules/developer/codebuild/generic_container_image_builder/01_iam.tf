@@ -27,7 +27,7 @@ resource "aws_iam_policy" "connections" {
   })
 }
 
-resource "aws_iam_policy" "ecr_push" {
+resource "aws_iam_policy" "ecr_get_and_push" {
   name        = "Prod-ECRPush-${var.shortname}-${var.project_name}-${var.region}"
   path        = "/TerraformManaged/"
   description = "Allow to push images to ECR"
@@ -38,6 +38,7 @@ resource "aws_iam_policy" "ecr_push" {
       {
         "Effect" : "Allow",
         "Action" : [
+          "ecr:BatchGetImage",
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchCheckLayerAvailability",
           "ecr:PutImage",
@@ -111,8 +112,8 @@ resource "aws_iam_role_policy_attachment" "connections_to_codebuild" {
   role       = aws_iam_role.codebuild.name
 }
 
-resource "aws_iam_role_policy_attachment" "ecr_push_to_codebuild" {
-  policy_arn = aws_iam_policy.ecr_push.arn
+resource "aws_iam_role_policy_attachment" "ecr_get_and_push_to_codebuild" {
+  policy_arn = aws_iam_policy.ecr_get_and_push.arn
   role       = aws_iam_role.codebuild.name
 }
 

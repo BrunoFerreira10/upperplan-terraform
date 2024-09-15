@@ -8,10 +8,11 @@ phases:
       - apt-get install -y docker.io
   pre_build:
     commands:
-      - echo "Logando no Amazon ECR"
-      - aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}
+      - echo "Pre build vazio"
   build:
     commands:
+      - echo "Logando no Amazon ECR"
+      - aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}
       - echo "Construindo a imagem Docker"
       - docker build -t ${REPOSITORY_URI}:latest .
       - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:latest
