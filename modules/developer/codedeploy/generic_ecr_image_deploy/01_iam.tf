@@ -10,21 +10,21 @@ resource "aws_iam_policy" "lambda_codedeploy_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        "Effect": "Allow",
-        "Action": [
+        "Effect" : "Allow",
+        "Action" : [
           "codedeploy:GetDeploymentConfig",
           "codedeploy:GetApplicationRevision",
           "codedeploy:CreateDeployment",
           "codedeploy:RegisterApplicationRevision"
         ],
-        "Resource": "*"
+        "Resource" : "*"
       },
       {
-        "Effect": "Allow",
-        "Action": [
+        "Effect" : "Allow",
+        "Action" : [
           "s3:GetObject"
         ],
-        "Resource": "arn:aws:s3:::${var.project_bucket_name}/*"
+        "Resource" : "arn:aws:s3:::${var.project_bucket_name}/*"
       }
     ]
   })
@@ -67,12 +67,12 @@ data "aws_iam_policy_document" "topic" {
     }
 
     actions   = ["SNS:Publish"]
-    resources = [aws_sns_topic.s3_deployment_notifications.arn]  # Corrigido para referenciar o tópico SNS criado
+    resources = [aws_sns_topic.s3_deployment_notifications.arn] # Corrigido para referenciar o tópico SNS criado
 
     condition {
       test     = "ArnLike"
       variable = "aws:SourceArn"
-      values   = [data.aws_s3_bucket.project_bucket_name.arn]  # Corrigido para usar o ARN do bucket S3 referenciado
+      values   = [data.aws_s3_bucket.project_bucket_name.arn] # Corrigido para usar o ARN do bucket S3 referenciado
     }
   }
 }
@@ -100,8 +100,12 @@ resource "aws_iam_policy" "ecs_deploy" {
           "elasticloadbalancing:DeregisterTargets",
           "elasticloadbalancing:RegisterTargets",
           "elasticloadbalancing:DescribeTargetGroups",
+          "elasticloadbalancing:DescribeTargetHealth",
+          "elasticloadbalancing:DescribeLoadBalancers",
           "elasticloadbalancing:DescribeListeners",
           "elasticloadbalancing:ModifyListener",
+          "elasticloadbalancing:DescribeRules",
+          "elasticloadbalancing:ModifyRule",
           "cloudwatch:DescribeAlarms",
           "cloudwatch:PutMetricAlarm",
           "iam:PassRole"
