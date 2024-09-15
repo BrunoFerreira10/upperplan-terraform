@@ -1,6 +1,4 @@
-# scripts/lambda_function.py
-
-import boto3 # type: ignore
+import boto3
 import json
 import os
 
@@ -11,7 +9,6 @@ def lambda_handler(event, context):
     bucket = message_json['Records'][0]['s3']['bucket']['name']
     key = message_json['Records'][0]['s3']['object']['key']
     
-    # As variáveis do aplicativo e grupo de deployment agora vêm do ambiente
     application_name = os.environ['APPLICATION_NAME']
     deployment_group_name = os.environ['DEPLOYMENT_GROUP_NAME']
     
@@ -26,8 +23,7 @@ def lambda_handler(event, context):
                 'key': key,
                 'bundleType': 'zip'
             }
-        },
-        fileExistsBehavior='OVERWRITE'
+        }
     )
     
     print("Deployment initiated:", response)
