@@ -1,6 +1,6 @@
-module "ecs_service" {
+module "ecs" {
   source = "../modules/containers/ecs/generic_ecs_service"
-  ecr_repository = module.data.projects.container_image_builder.ecr.repository
+  ecr_repository = module.data.projects.ecr.repository
   region = module.data.github_vars.general_region
   sg_ecs_service_rules = {
     ingress = {

@@ -39,8 +39,8 @@ resource "aws_codedeploy_deployment_group" "this" {
   }
 
   ecs_service {
-    cluster_name = "cluster-${var.shortname}"
-    service_name = "service-${var.shortname}"
+    cluster_name = var.ecs.cluster.name
+    service_name = var.ecs.service.name
   }
 
   load_balancer_info {

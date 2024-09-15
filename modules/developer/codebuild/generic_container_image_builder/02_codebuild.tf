@@ -39,7 +39,7 @@ resource "aws_codebuild_project" "ecr" {
     git_clone_depth = 1
     buildspec = templatefile("${path.module}/files/buildspec.yml.tpl", {
       REGION         = var.region,
-      REPOSITORY_URI = module.ecr_repository.repository.repository_url
+      REPOSITORY_URI = var.ecr_repository.repository_url
     })
   }
 

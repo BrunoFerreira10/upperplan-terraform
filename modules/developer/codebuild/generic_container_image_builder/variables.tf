@@ -2,13 +2,12 @@ variable "app_repository_url_https" {
   type = string
 }
 
-variable "github_connection_name" {
-  type = string  
+variable "ecr_repository" {
+  type = any
 }
 
-variable "lb_listeners" {
-  description = "Listeners for Blue/Green deployment"
-  type        = any
+variable "github_connection_name" {
+  type = string  
 }
 
 variable "project_bucket_name" {
@@ -23,9 +22,4 @@ variable "region" {
 variable "shortname" {
   description = "Nome curto para identificacao dos recursos"
   type        = string
-}
-
-variable "target_groups" {
-  description = "Target groups for Blue/Green deployment"
-  type        = any
 }

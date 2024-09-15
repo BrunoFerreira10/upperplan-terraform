@@ -73,7 +73,6 @@ jobs:
 
   elb:
     needs: [
-      github_sync, 
       vpc,
       acm
     ]
@@ -84,7 +83,6 @@ jobs:
 
   rds:
     needs: [
-      github_sync, 
       vpc
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
@@ -94,20 +92,31 @@ jobs:
 
   efs:
     needs: [
-      github_sync, 
+      
       vpc
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
       RESOURCE: '3c'
-    secrets: inherit  
-
-  ## - Nivel 4 -----------------------------------------------------------------
+    secrets: inherit
 
   container_image_builder:
     needs: [
-      github_sync,
+      ecr,
       elb
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '3d'
+    secrets: inherit    
+
+  ## - Nivel 4 -----------------------------------------------------------------
+
+  ecs:
+    needs: [
+      vpc,
+      ecr,
+      elb, rds, efs
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
@@ -116,28 +125,14 @@ jobs:
 
   ## - Nivel 5 -----------------------------------------------------------------
 
-  ecs_service:
+  container_image_deploy:
     needs: [
-      github_sync,
-      vpc,
-      elb, rds, efs,
-      container_image_builder
+      elb,
+      ecs
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
       RESOURCE: '5a'
-    secrets: inherit
-
-  ## - Nivel 6 -----------------------------------------------------------------
-
-  deploy_container_image:
-    needs: [
-      github_sync,
-      elb
-    ]
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '6a'
     secrets: inherit
 
   ## ---------------------------------------------------------------------------

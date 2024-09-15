@@ -2,6 +2,10 @@ variable "app_repository_url_https" {
   type = string
 }
 
+variable "ecs" {
+  description = "ECS Information"
+  type        = any
+}
 
 variable "lb_listeners" {
   description = "Listeners for Blue/Green deployment"
@@ -9,7 +13,7 @@ variable "lb_listeners" {
 }
 
 variable "project_bucket_name" {
-  type = string  
+  type = string
 }
 
 variable "region" {

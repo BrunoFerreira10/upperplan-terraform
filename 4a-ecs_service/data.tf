@@ -3,7 +3,7 @@ module "data" {
   shortname = var.general_tag_shortname
   requested_data = [
     "vpc",
-    "elb",
-    "container_image_builder"
+    "ecr",
+    "elb"
   ]
 }
