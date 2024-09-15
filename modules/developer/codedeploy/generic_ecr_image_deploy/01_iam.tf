@@ -122,6 +122,29 @@ resource "aws_iam_policy" "ecs_deploy" {
   })
 }
 
+resource "aws_iam_policy" "codedeploy_s3_access" {
+  name        = "CodeDeployS3Access-${var.shortname}-${var.region}"
+  description = "Política para permitir que o CodeDeploy acesse o S3"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject",
+          "s3:GetObjectVersion",
+          "s3:ListBucket"
+        ],
+        Resource = [
+          "arn:aws:s3:::${var.project_bucket_name}",
+          "arn:aws:s3:::${var.project_bucket_name}/*"
+        ]
+      }
+    ]
+  })
+}
+
 
 ## -- Role -------------------------------------------------------------------------------------------------------------
 
@@ -148,5 +171,11 @@ resource "aws_iam_role_policy_attachment" "ecr_deploy_to_codedeploy" {
   policy_arn = aws_iam_policy.ecs_deploy.arn
   role       = aws_iam_role.codedeploy.name
 }
+
+resource "aws_iam_role_policy_attachment" "codedeploy_s3_access_to_codedeploy" {
+  policy_arn = aws_iam_policy.codedeploy_s3_access.arn
+  role       = aws_iam_role.codedeploy.name
+}
+
 
 ## ---------------------------------------------------------------------------------------------------------------------
