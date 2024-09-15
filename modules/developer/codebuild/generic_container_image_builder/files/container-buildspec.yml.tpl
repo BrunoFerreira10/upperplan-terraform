@@ -21,5 +21,5 @@ phases:
       - docker push ${REPOSITORY_URI}:latest
       - echo "Build e push da imagem Docker concluídos com sucesso"
       - echo "Iniciando o build da segunda imagem"
-      - aws codebuild start-build --project-name ${SHORTNAME}_app --region ${REGION}
+      - aws codebuild start-build --project-name ${SHORTNAME}-app --region ${REGION}
       - echo "Build da segunda imagem iniciado com sucesso"
