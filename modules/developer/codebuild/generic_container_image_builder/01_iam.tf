@@ -4,7 +4,7 @@
 
 ## -- Policies ---------------------------------------------------------------------------------------------------------
 resource "aws_iam_policy" "connections" {
-  name = "CodeBuildCodeConnectionsSourceCredentialsPolicy-${var.shortname}-${var.region}"
+  name = "Prod-GetConnection-${var.shortname}-${var.project_name}-${var.region}"
   path = "/TerraformManaged/"
   description = "Policy used in trust relationship with CodeBuild and ${var.shortname} application"
   
@@ -28,7 +28,7 @@ resource "aws_iam_policy" "connections" {
 }
 
 resource "aws_iam_policy" "ecr_push" {
-  name        = "Prod-ECRPush-${var.shortname}-${var.region}"
+  name        = "Prod-ECRPush-${var.shortname}-${var.project_name}-${var.region}"
   path        = "/TerraformManaged/"
   description = "Allow to push images to ECR"
 
@@ -54,12 +54,12 @@ resource "aws_iam_policy" "ecr_push" {
   })
 
   tags = {
-    Name = "Prod-ECRPush-${var.shortname}-${var.region}"
+    Name = "Prod-ECRPush-${var.shortname}-${var.project_name}-${var.region}"
   }
 }
 
 resource "aws_iam_policy" "start_build" {
-  name        = "StartBuild-${var.shortname}-${var.region}"
+  name        = "Prod-StartBuild-${var.shortname}-${var.project_name}-${var.region}"
   description = "Permissão para CodeBuild iniciar outro build via AWS CLI."
 
   policy = jsonencode({
@@ -84,7 +84,7 @@ resource "aws_iam_policy" "start_build" {
 
 ## -- Role -------------------------------------------------------------------------------------------------------------
 resource "aws_iam_role" "codebuild" {
-  name = "prod-ecr-push-${var.shortname}"
+  name = "Prod-CodeBuild-${var.shortname}-${var.project_name}-${var.region}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
