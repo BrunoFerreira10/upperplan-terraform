@@ -40,7 +40,7 @@ resource "aws_s3_bucket_notification" "s3_bucket_notifications" {
     events    = ["s3:ObjectCreated:*"]
 
     filter_prefix = "code_deploy_outputs/"
-    filter_suffix = "container-build.zip"
+    filter_suffix = "app-build.zip"
   }
 }
 ## ---------------------------------------------------------------------------------------------------------------------
