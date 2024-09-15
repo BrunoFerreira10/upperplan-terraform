@@ -91,12 +91,16 @@ resource "aws_iam_policy" "ecs_deploy" {
       {
         Effect = "Allow",
         Action = [
-          "ecs:UpdateService",
-          "ecs:RegisterTaskDefinition",
+          "ecs:CreateTaskSet",
+          "ecs:DeleteTaskSet",
           "ecs:DescribeServices",
           "ecs:DescribeTaskDefinition",
+          "ecs:DescribeTaskSets",
           "ecs:ListTasks",
+          "ecs:RegisterTaskDefinition",
           "ecs:StopTask",
+          "ecs:UpdateService",
+          "ecs:UpdateServicePrimaryTaskSet",
           "elasticloadbalancing:DeregisterTargets",
           "elasticloadbalancing:RegisterTargets",
           "elasticloadbalancing:DescribeTargetGroups",
