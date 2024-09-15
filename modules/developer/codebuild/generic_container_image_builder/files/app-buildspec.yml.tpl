@@ -21,11 +21,11 @@ phases:
       - docker push ${REPOSITORY_URI}:latest
       - echo "Build e push da imagem Docker concluídos com sucesso"
       - echo "Gerando aquivo zip do build do container"
-      - mkdir -p container-build
+      - mkdir -p app-build
       - ls -la
-      - rsync -av --exclude='container-build' ./ container-build/
+      - rsync -av --exclude='app-build' ./ app-build/
 artifacts:
   files:
     - "**/*"
   discard-paths: no
-  base-directory: "container-build"
+  base-directory: "app-build"

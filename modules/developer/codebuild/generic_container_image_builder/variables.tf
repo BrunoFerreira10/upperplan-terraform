@@ -1,4 +1,11 @@
-variable "app_repository_url_https" {
+variable "artifact_file_name" {
+  description = "Artifact file name"
+  type = string
+  default = ""
+}
+
+variable "buildspec_file_name" {
+  description = "Buildspec file name"
   type = string
 }
 
@@ -14,9 +21,18 @@ variable "project_bucket_name" {
   type = string  
 }
 
+variable "project_name" {
+  description = "Codebuild project name"
+  type        = string  
+}
+
 variable "region" {
   description = "Região onde a infraestrutura será criada."
   type        = string
+}
+
+variable "repository_url_https" {
+  type = string
 }
 
 variable "shortname" {

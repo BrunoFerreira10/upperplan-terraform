@@ -15,15 +15,25 @@ resource "aws_codebuild_source_credential" "this" {
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_codebuild_project" "ecr" {
-  name         = "${var.shortname}-app"
+  name         = "${var.shortname}-${var.project_name}"
   service_role = aws_iam_role.codebuild.arn
 
+  # artifacts {
+  #   type      = "S3"
+  #   location  = var.project_bucket_name
+  #   name      = "container-build.zip"
+  #   path      = "code_build_outputs"
+  #   packaging = "ZIP"
+  # }
+
   artifacts {
-    type      = "S3"
-    location  = var.project_bucket_name
-    name      = "container-build.zip"
-    path      = "code_deploy_outputs"
-    packaging = "ZIP"
+    type = var.artifact_file_name != "" ? "S3" : "NO_ARTIFACTS"
+
+    # Esses campos só são configurados quando type == "S3"
+    location  = var.artifact_file_name != "" ? var.project_bucket_name : null
+    name      = var.artifact_file_name != "" ? var.artifact_file_name : null
+    path      = var.artifact_file_name != "" ? "code_build_outputs" : null
+    packaging = var.artifact_file_name != "" ? "ZIP" : null
   }
 
   environment {
@@ -35,17 +45,18 @@ resource "aws_codebuild_project" "ecr" {
 
   source {
     type            = "GITHUB"
-    location        = var.app_repository_url_https
+    location        = var.repository_url_https
     git_clone_depth = 1
-    buildspec = templatefile("${path.module}/files/buildspec.yml.tpl", {
+    buildspec = templatefile("${path.module}/files/${var.buildspec_file_name}", {
       REGION         = var.region,
       REPOSITORY_URI = var.ecr_repository.repository_url
+      SHORTNAME      = var.shortname
     })
   }
 
   logs_config {
     cloudwatch_logs {
-      group_name = "/aws/codebuild/${var.shortname}-app"
+      group_name = "/aws/codebuild/${var.shortname}-${var.project_name}"
     }
   }
 }
@@ -55,7 +66,7 @@ resource "aws_codebuild_project" "ecr" {
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_codebuild_webhook" "this" {
-  project_name = aws_codebuild_project.ecr.name
+  project_name = "${var.shortname}-${var.project_name}"
   build_type   = "BUILD"
   filter_group {
     filter {

@@ -2,7 +2,7 @@
 ## ECR Repository
 ## ---------------------------------------------------------------------------------------------------------------------
 resource "aws_ecr_repository" "this" {
-  name                 = "${var.shortname}/app"
+  name                 = "${var.shortname}/${var.repository_name}"
   image_tag_mutability = "MUTABLE"
 
   image_scanning_configuration {

@@ -1,5 +1,5 @@
 ## ---------------------------------------------------------------------------------------------------------------------
-## Codebuild ECR Push Role
+## Codebuild Role
 ## ---------------------------------------------------------------------------------------------------------------------
 
 ## -- Policies ---------------------------------------------------------------------------------------------------------
@@ -58,6 +58,30 @@ resource "aws_iam_policy" "ecr_push" {
   }
 }
 
+resource "aws_iam_policy" "start_build" {
+  name        = "StartBuild-${var.shortname}-${var.region}"
+  description = "Permissão para CodeBuild iniciar outro build via AWS CLI."
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "codebuild:StartBuild",
+          "codebuild:BatchGetBuilds",
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ],
+        Resource = [
+          "arn:aws:codebuild:${var.region}:${data.aws_caller_identity.current.account_id}:project/${var.shortname}-app",
+          "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/*"
+        ]
+      }
+    ]
+  })
+}
+
 ## -- Role -------------------------------------------------------------------------------------------------------------
 resource "aws_iam_role" "codebuild" {
   name = "prod-ecr-push-${var.shortname}"
@@ -89,6 +113,11 @@ resource "aws_iam_role_policy_attachment" "connections_to_codebuild" {
 
 resource "aws_iam_role_policy_attachment" "ecr_push_to_codebuild" {
   policy_arn = aws_iam_policy.ecr_push.arn
+  role       = aws_iam_role.codebuild.name
+}
+
+resource "aws_iam_role_policy_attachment" "start_build_to_codebuild" {
+  policy_arn = aws_iam_policy.start_build.arn
   role       = aws_iam_role.codebuild.name
 }
 
