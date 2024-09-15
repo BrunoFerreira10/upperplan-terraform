@@ -39,7 +39,7 @@ resource "aws_s3_bucket_notification" "s3_bucket_notifications" {
     topic_arn = aws_sns_topic.s3_deployment_notifications.arn  # Referencia o tópico SNS criado
     events    = ["s3:ObjectCreated:*"]
 
-    filter_prefix = "code_deploy_outputs/"
+    filter_prefix = "code_build_outputs/"
     filter_suffix = "app-build.zip"
   }
 }
