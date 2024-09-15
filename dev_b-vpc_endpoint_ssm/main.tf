@@ -10,5 +10,5 @@ module "ssm_vpc_endpoint" {
     }
   }
   shortname = module.data.github_vars.general_tag_shortname
-  vpc = module.data.projects.vpc_app.vpc
+  vpc = module.data.projects.vpc.vpc
 }

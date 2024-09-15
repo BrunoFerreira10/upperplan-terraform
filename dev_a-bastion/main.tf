@@ -3,7 +3,7 @@ module "bastion" {
   ec2_ssh_keypair_name = module.data.github_vars.ec2_ssh_keypair_name
   region               = module.data.github_vars.general_region
   shortname            = module.data.github_vars.general_tag_shortname
-  vpc                  = module.data.projects.vpc_app.vpc
+  vpc                  = module.data.projects.vpc.vpc
   sg_bastion_rules     = {
     ingress = {
       SSH = {description = "Allow SSH from ${data.aws_ssm_parameter.my_ip.value}"
