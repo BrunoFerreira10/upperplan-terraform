@@ -4,6 +4,8 @@
 
 resource "aws_ecs_task_definition" "this" {
   family = "task-${var.shortname}"
+  track_latest = true
+
   runtime_platform {
     cpu_architecture        = "X86_64"
     operating_system_family = "LINUX"
@@ -64,6 +66,7 @@ resource "aws_ecs_service" "this" {
   name            = "service-${var.shortname}"
   cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.this.arn
+  
 
   launch_type = "FARGATE"
 
