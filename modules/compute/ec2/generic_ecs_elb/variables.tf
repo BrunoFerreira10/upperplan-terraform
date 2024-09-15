@@ -14,16 +14,6 @@ variable "domain" {
   type        = string
 }
 
-variable "efs" {
-  description = "EFS from EC2 instances"
-  type = any
-}
-
-variable "rds" {
-  description = "RDS from app configuration"
-  type = any
-}
-
 variable "sg_elb_rules" {
   description = "Rules for ELB security group"
   type        = any

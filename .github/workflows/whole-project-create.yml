@@ -9,17 +9,21 @@ on:
         type: string
         description: "Vazio aborta. Qualquer valor confirma."
 
+## -----------------------------------------------------------------------------
+## Create project 
+## -----------------------------------------------------------------------------
 jobs:
-  ################################# 
-  ######## Create project #########
-  #################################
+  ## - Nivel 1 -----------------------------------------------------------------
+
   github_sync:
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
       RESOURCE: '1a'
     secrets: inherit
 
-  vpc_app:
+  ## - Nivel 2 -----------------------------------------------------------------
+
+  vpc:
     needs: [
       github_sync
     ]
@@ -28,7 +32,26 @@ jobs:
       RESOURCE: '2a'
     secrets: inherit
 
-  acm_app:
+  nat_gateway:
+    needs: [
+      github_sync,
+      vpc
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '2a1'
+    secrets: inherit
+
+  acm:
+    needs: [
+      github_sync
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '2b'
+    secrets: inherit
+
+  cloudwatch_logs:
     needs: [
       github_sync
     ]
@@ -36,98 +59,85 @@ jobs:
     with:
       RESOURCE: '2c'
     secrets: inherit
+  
+  ecr:
+    needs: [
+      github_sync
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '2d'
+    secrets: inherit
 
-  rds_app:
+  ## - Nivel 3 -----------------------------------------------------------------
+
+  elb:
     needs: [
       github_sync, 
-      vpc_app
+      vpc,
+      acm
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '3a'
+    secrets: inherit
+
+  rds:
+    needs: [
+      github_sync, 
+      vpc
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
       RESOURCE: '3b'
     secrets: inherit
 
-  efs_app:
+  efs:
     needs: [
       github_sync, 
-      vpc_app
+      vpc
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
       RESOURCE: '3c'
-    secrets: inherit
+    secrets: inherit  
 
-  image_builder_app:
+  ## - Nivel 4 -----------------------------------------------------------------
+
+  container_image_builder:
     needs: [
       github_sync,
-      vpc_app
+      elb
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '4c'
+      RESOURCE: '4a'
     secrets: inherit
 
-  ami_app:
+  ## - Nivel 5 -----------------------------------------------------------------
+
+  ecs_service:
     needs: [
       github_sync,
-      vpc_app,
-      image_builder_app
+      vpc,
+      elb, rds, efs,
+      container_image_builder
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
       RESOURCE: '5a'
     secrets: inherit
 
-  elb_app:
+  ## - Nivel 6 -----------------------------------------------------------------
+
+  deploy_container_image:
     needs: [
       github_sync,
-      vpc_app, acm_app,
-      rds_app, efs_app,
-      ami_app
+      elb
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
       RESOURCE: '6a'
     secrets: inherit
 
-  vpc_endpoint_codedeploy:
-    needs: [
-      github_sync,
-      vpc_app
-    ]
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '7a'
-    secrets: inherit
-    
-  vpc_endpoint_s3:
-    needs: [
-      github_sync,
-      vpc_app
-    ]
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '7b'
-    secrets: inherit
-
-  vpc_endpoint_ssm:
-    needs: [
-      github_sync,
-      vpc_app
-    ]
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '7c'
-    secrets: inherit    
-
-  deploy_app:
-    needs: [
-      github_sync,
-      vpc_app,
-      rds_app,
-      elb_app
-    ]
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '8a'
-    secrets: inherit
+  ## ---------------------------------------------------------------------------
