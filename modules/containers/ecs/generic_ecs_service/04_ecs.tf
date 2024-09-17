@@ -12,32 +12,12 @@ resource "aws_ecs_task_definition" "this" {
   }
 
   volume {
-    name = "etc-glpi"
+    name = "efs-glpi"
     efs_volume_configuration {
       file_system_id     = var.efs.id
-      root_directory     = "/etc/glpi"
       transit_encryption = "ENABLED"
     }
   }
-
-  volume {
-    name = "var-lib-glpi"
-    efs_volume_configuration {
-      file_system_id     = var.efs.id
-      root_directory     = "/var/lib/glpi"
-      transit_encryption = "ENABLED"
-    }
-  }
-
-  volume {
-    name = "var-log-glpi"
-    efs_volume_configuration {
-      file_system_id     = var.efs.id
-      root_directory     = "/var/log/glpi"
-      transit_encryption = "ENABLED"
-    }
-  }
-
 
   container_definitions = jsonencode([
     {
@@ -64,18 +44,18 @@ resource "aws_ecs_task_definition" "this" {
       ]
       mountPoints = [
         {
-          sourceVolume  = "etc-glpi"
-          containerPath = "/etc/glpi"
+          sourceVolume  = "efs-glpi"
+          containerPath = "/mnt/efs_gpli/config"
           readOnly      = false
         },
         {
-          sourceVolume  = "var-lib-glpi"
-          containerPath = "/var/lib/glpi"
+          sourceVolume  = "efs-glpi"
+          containerPath = "/mnt/efs_gpli/files"
           readOnly      = false
         },
         {
-          sourceVolume  = "var-log-glpi"
-          containerPath = "/var/log/glpi"
+          sourceVolume  = "efs-glpi"
+          containerPath = "/mnt/efs_gpli/logs"
           readOnly      = false
         }
       ]
