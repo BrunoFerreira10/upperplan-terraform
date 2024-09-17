@@ -46,17 +46,17 @@ resource "aws_ecs_task_definition" "this2" {
       mountPoints = [
         {
           sourceVolume  = "efs-glpi"
-          containerPath = "/mnt/efs_gpli/config"
+          containerPath = "/mnt/efs_glpi/config"
           readOnly      = false
         },
         {
           sourceVolume  = "efs-glpi"
-          containerPath = "/mnt/efs_gpli/files"
+          containerPath = "/mnt/efs_glpi/files"
           readOnly      = false
         },
         {
           sourceVolume  = "efs-glpi"
-          containerPath = "/mnt/efs_gpli/logs"
+          containerPath = "/mnt/efs_glpi/logs"
           readOnly      = false
         }
       ]
