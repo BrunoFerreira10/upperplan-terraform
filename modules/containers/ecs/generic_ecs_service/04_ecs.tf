@@ -14,8 +14,8 @@ resource "aws_ecs_task_definition" "this" {
   volume {
     name = "etc-glpi"
     efs_volume_configuration {
-      file_system_id = var.efs.id
-      # root_directory          = "/etc/glpi"
+      file_system_id     = var.efs.id
+      root_directory     = "/etc/glpi"
       transit_encryption = "ENABLED"
     }
   }
@@ -23,8 +23,8 @@ resource "aws_ecs_task_definition" "this" {
   volume {
     name = "var-lib-glpi"
     efs_volume_configuration {
-      file_system_id = var.efs.id
-      # root_directory          = "/var/lib/glpi"
+      file_system_id     = var.efs.id
+      root_directory     = "/var/lib/glpi"
       transit_encryption = "ENABLED"
     }
   }
@@ -32,8 +32,8 @@ resource "aws_ecs_task_definition" "this" {
   volume {
     name = "var-log-glpi"
     efs_volume_configuration {
-      file_system_id = var.efs.id
-      # root_directory          = "/var/log/glpi"
+      file_system_id     = var.efs.id
+      root_directory     = "/var/log/glpi"
       transit_encryption = "ENABLED"
     }
   }
