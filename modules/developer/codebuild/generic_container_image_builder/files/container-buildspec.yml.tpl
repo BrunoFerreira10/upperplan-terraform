@@ -13,6 +13,7 @@ phases:
   build:
     commands:
       - echo "Construindo a imagem Docker"
+      - export DOCKER_BUILDKIT=1
       - docker build -t ${REPOSITORY_URI}:latest .
       - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:latest
   post_build:
