@@ -127,7 +127,7 @@ resource "aws_ecs_service" "this" {
     assign_public_ip = false
   }
 
-  health_check_grace_period_seconds = 15
+  health_check_grace_period_seconds = 30
 
   # launch_type = "FARGATE"
   capacity_provider_strategy {
