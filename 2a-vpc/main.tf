@@ -22,15 +22,16 @@ module "vpc_app" {
       },
       private = {
         ingress = {
-          SSH       = { rule_number = 100, port = 22 },
-          HTTP      = { rule_number = 200, port = 80 },
+          SSH            = { rule_number = 100, port = 22 },
+          HTTP           = { rule_number = 200, port = 80 },
           EPHEMERAL_TEMP = { rule_number = 400, from_port = 1024, to_port = 65535, cidr_block = "0.0.0.0/0" } # USER DATA
-          EPHEMERAL = { rule_number = 500, from_port = 1024, to_port = 65535 }
+          EPHEMERAL      = { rule_number = 500, from_port = 1024, to_port = 65535 }
         },
         egress = {
-          SSH            = { rule_number = 102, port = 22, cidr_block = "0.0.0.0/0" },                         # USER DATA
-          HTTPS          = { rule_number = 202, port = 443, cidr_block = "0.0.0.0/0" },                        # USER DATA
-          EPHEMERAL      = { rule_number = 402, from_port = 1024, to_port = 65535 }
+          SSH       = { rule_number = 102, port = 22, cidr_block = "0.0.0.0/0" },  # USER DATA
+          HTTPS     = { rule_number = 202, port = 443, cidr_block = "0.0.0.0/0" }, # USER DATA
+          HTTP      = { rule_number = 302, port = 80, cidr_block = "0.0.0.0/0" },  # USER DATA
+          EPHEMERAL = { rule_number = 402, from_port = 1024, to_port = 65535 }
         }
       }
     }
