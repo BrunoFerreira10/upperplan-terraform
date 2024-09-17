@@ -4,6 +4,7 @@ module "data" {
   requested_data = [
     "vpc",
     "ecr",
-    "elb"
+    "elb",
+    "efs"
   ]
 }

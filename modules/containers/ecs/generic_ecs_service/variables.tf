@@ -3,6 +3,11 @@ variable "ecr_repository" {
   type = any
 }
 
+variable "efs" {
+  description = "EFS that will be mounted on ECS service"
+  type        = any
+}
+
 variable "region" {
   description = "Região onde a infraestrutura será criada."
   type        = string

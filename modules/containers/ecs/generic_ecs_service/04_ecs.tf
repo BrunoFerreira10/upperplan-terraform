@@ -10,6 +10,35 @@ resource "aws_ecs_task_definition" "this" {
     cpu_architecture        = "X86_64"
     operating_system_family = "LINUX"
   }
+
+   volume {
+    name = "etc-glpi"
+    efs_volume_configuration {
+      file_system_id          = var.efs.id
+      root_directory          = "/etc/glpi"
+      transit_encryption      = "ENABLED"
+    }
+  }
+
+  volume {
+    name = "var-lib-glpi"
+    efs_volume_configuration {
+      file_system_id          = var.efs.id
+      root_directory          = "/var/lib/glpi"
+      transit_encryption      = "ENABLED"
+    }
+  }
+
+  volume {
+    name = "var-log-glpu"
+    efs_volume_configuration {
+      file_system_id          = var.efs.id
+      root_directory          = "/var/log/glpi"
+      transit_encryption      = "ENABLED"
+    }
+  }
+
+
   container_definitions = jsonencode([
     {
       essential = true,
@@ -32,6 +61,23 @@ resource "aws_ecs_task_definition" "this" {
           hostPort      = 80
           protocol      = "tcp"
         },
+      ]
+      mountPoints = [
+        {
+          sourceVolume  = "etc-glpi"
+          containerPath = "/etc/glpi"
+          readOnly      = false
+        },
+        {
+          sourceVolume  = "var-lib-glpi"
+          containerPath = "/var/lib/glpi"
+          readOnly      = false
+        },
+        {
+          sourceVolume  = "var-log-glpu"
+          containerPath = "/var/log/glpi"
+          readOnly      = false
+        }
       ]
     }
   ])
