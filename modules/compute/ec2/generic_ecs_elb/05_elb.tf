@@ -16,7 +16,7 @@ resource "aws_lb" "this" {
 
   enable_deletion_protection = false
 
-  idle_timeout = 60
+  idle_timeout = 3600
 
   tags = {
     Name = "elb_${var.shortname}"
@@ -29,21 +29,20 @@ resource "aws_lb_listener" "http" {
   port              = "80"
   protocol          = "HTTP"
 
-  # Desativando redirecionamento HTTPS por enquanto
-  # default_action {
-  #   type = "redirect"
-
-  #   redirect {
-  #     port        = "443"
-  #     protocol    = "HTTPS"
-  #     status_code = "HTTP_301"
-  #   }
-  # }
-
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.blue.arn
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
+
+  # default_action {
+  #   type             = "forward"
+  #   target_group_arn = aws_lb_target_group.blue.arn
+  # }
 
   tags = {
     Name = "listener_http_${var.shortname}"

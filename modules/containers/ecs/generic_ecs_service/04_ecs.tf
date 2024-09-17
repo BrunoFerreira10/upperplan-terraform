@@ -3,7 +3,7 @@
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_ecs_task_definition" "this" {
-  family = "task-${var.shortname}"
+  family       = "task-${var.shortname}"
   track_latest = true
 
   runtime_platform {
@@ -66,11 +66,11 @@ resource "aws_ecs_service" "this" {
   name            = "service-${var.shortname}"
   cluster         = aws_ecs_cluster.this.id
   task_definition = aws_ecs_task_definition.this.arn
-  
+
 
   launch_type = "FARGATE"
 
-  desired_count                      = 0
+  desired_count                      = 1
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
 
@@ -83,17 +83,21 @@ resource "aws_ecs_service" "this" {
     assign_public_ip = false
   }
 
-  health_check_grace_period_seconds = 240
+  health_check_grace_period_seconds = 15
 
-  # capacity_provider_strategy { 
-  #   base              = 0
-  #   capacity_provider = "FARGATE_SPOT"
-  #   weight            = 100
-  # }
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE"
+    weight            = 1
+    base              = 1
+  }
+  capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 2
+  }
 
   deployment_circuit_breaker {
-    enable   = false
-    rollback = false
+    enable   = true
+    rollback = true
   }
 
   deployment_controller {
@@ -109,12 +113,6 @@ resource "aws_ecs_service" "this" {
   tags = {
     Name = "service-${var.shortname}"
   }
-
-  # lifecycle {
-  #   ignore_changes = [launch_type, task_definition, desired_count]
-  # }
-
-  # depends_on = [aws_lb_listener_rule.static]
 }
 
 ## ---------------------------------------------------------------------------------------------------------------------
@@ -122,8 +120,8 @@ resource "aws_ecs_service" "this" {
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_appautoscaling_target" "this" {
-  max_capacity       = 3
-  min_capacity       = 0
+  max_capacity       = 1
+  min_capacity       = 1
   resource_id        = "service/${aws_ecs_cluster.this.name}/${aws_ecs_service.this.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
@@ -141,7 +139,7 @@ resource "aws_appautoscaling_policy" "memory" {
       predefined_metric_type = "ECSServiceAverageMemoryUtilization"
     }
 
-    target_value = 70
+    target_value = 60
   }
 }
 
@@ -157,7 +155,7 @@ resource "aws_appautoscaling_policy" "cpu" {
       predefined_metric_type = "ECSServiceAverageCPUUtilization"
     }
 
-    target_value = 80
+    target_value = 60
   }
 }
 ## ---------------------------------------------------------------------------------------------------------------------

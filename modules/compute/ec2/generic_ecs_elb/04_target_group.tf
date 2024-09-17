@@ -14,11 +14,11 @@ resource "aws_lb_target_group" "blue" {
     enabled             = true
     protocol            = "HTTP"
     path                = "/"
-    interval            = 10
+    interval            = 7
     timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 3
-    matcher             = "200-404"
+    matcher             = "200-302"
   }
 
   tags = {
@@ -38,11 +38,11 @@ resource "aws_lb_target_group" "green" {
     enabled             = true
     protocol            = "HTTP"
     path                = "/"
-    interval            = 10
+    interval            = 7
     timeout             = 5
     healthy_threshold   = 2
     unhealthy_threshold = 3
-    matcher             = "200-404"
+    matcher             = "200-302"
   }
 
   tags = {
