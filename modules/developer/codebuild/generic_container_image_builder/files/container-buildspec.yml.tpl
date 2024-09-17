@@ -4,8 +4,8 @@ phases:
   install:
     commands:
       - echo "Atualizando pacotes e instalando o Docker"
-      - apt-get update
-      - apt-get install -y docker.io
+      # - apt-get update
+      # - apt-get install -y docker.io
   pre_build:
     commands:
       - echo "Logando no Amazon ECR"
