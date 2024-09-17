@@ -18,7 +18,7 @@ phases:
   post_build:
     commands:
       - echo "Fazendo push da imagem para o Amazon ECR"
-      - docker push ${REPOSITORY_URI}:latest
+      - docker push ${REPOSITORY_URI}:latest --quiet
       
       # - echo "Iniciando o build da segunda imagem"
       # - aws codebuild start-build --project-name ${SHORTNAME}-app --region ${REGION}

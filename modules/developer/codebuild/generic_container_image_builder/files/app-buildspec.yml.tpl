@@ -26,8 +26,11 @@ phases:
       # - DB_NAME=$(aws ssm get-parameter --name $SSM_NAME $COMMON_SSM_ARGS)
       # - DB_USER=$(aws ssm get-parameter --name $SSM_USER $COMMON_SSM_ARGS)
       # - DB_PASSWORD=$(aws ssm get-parameter --name $SSM_PASSWORD $COMMON_SSM_ARGS --with-decryption)
-      
+      - echo "Fazendo pull da imagem base com menos verbosidade"
+      - docker pull 339712924273.dkr.ecr.us-east-1.amazonaws.com/upperplan-glpi/container:latest --quiet
+
       - echo "Construindo a imagem Docker"
+      - export DOCKER_BUILDKIT=1
       - docker build -t ${REPOSITORY_URI}:latest .
         # --build-arg DB_HOST="$DB_HOST"
         # --build-arg DB_NAME="$DB_NAME"
@@ -40,7 +43,7 @@ phases:
       - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:latest
 
       - echo "Fazendo push da imagem para o Amazon ECR"
-      - docker push ${REPOSITORY_URI}:latest
+      - docker push ${REPOSITORY_URI}:latest --quiet
       
       - echo "Movendo arquivos para a pasta de build (inicia o deploy)"
       - mkdir -p app-build
