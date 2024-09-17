@@ -140,10 +140,10 @@ resource "aws_ecs_service" "this" {
     weight            = 2
   }
 
-  deployment_circuit_breaker {
-    enable   = true
-    rollback = true
-  }
+  # deployment_circuit_breaker {
+  #   enable   = false
+  #   rollback = false
+  # }
 
   deployment_controller {
     type = "CODE_DEPLOY"
