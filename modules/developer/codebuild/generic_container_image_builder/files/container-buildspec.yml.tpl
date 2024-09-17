@@ -12,7 +12,7 @@ phases:
     commands:
       - echo "Construindo a imagem Docker"
       - export DOCKER_BUILDKIT=1
-      - docker build -t ${REPOSITORY_URI}:latest .
+      - docker build --build-arg BASE_REPOSITORY_URI=${BASE_REPOSITORY_URI} -t ${REPOSITORY_URI}:latest .
   post_build:
     commands:
       - echo "Taggeando a imagem Docker"

@@ -48,9 +48,10 @@ resource "aws_codebuild_project" "ecr" {
     location        = var.repository_url_https
     git_clone_depth = 1
     buildspec = templatefile("${path.module}/files/${var.buildspec_file_name}", {
-      REGION         = var.region,
-      REPOSITORY_URI = var.ecr_repository.repository_url
-      SHORTNAME      = var.shortname
+      REGION              = var.region
+      BASE_REPOSITORY_URI = var.ecr_base_repository.repository_url
+      REPOSITORY_URI      = var.ecr_repository.repository_url
+      SHORTNAME           = var.shortname
     })
   }
 

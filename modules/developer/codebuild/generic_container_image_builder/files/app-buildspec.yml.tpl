@@ -10,7 +10,7 @@ phases:
       - aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}
 
       - echo "Fazendo pull da imagem base com menos verbosidade"
-      - docker pull 339712924273.dkr.ecr.us-east-1.amazonaws.com/upperplan-glpi/container:latest --quiet
+      - docker pull ${BASE_REPOSITORY_URI}:latest --quiet
   build:
     commands:
       - echo "Dados para configuração do banco de dados"
@@ -31,6 +31,7 @@ phases:
       - echo "Construindo a imagem Docker"
       - export DOCKER_BUILDKIT=1
       - docker build 
+        --build-arg BASE_REPOSITORY_URI=${BASE_REPOSITORY_URI}:latest
         --build-arg DB_HOST="$DB_HOST"
         --build-arg DB_NAME="$DB_NAME"
         --build-arg DB_USER="$DB_USER"

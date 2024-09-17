@@ -2,6 +2,7 @@ module "app_image_builder" {
   source                 = "../modules/developer/codebuild/generic_container_image_builder"
   artifact_file_name     = "app-build.zip"
   buildspec_file_name    = "app-buildspec.yml.tpl"
+  ecr_base_repository    = module.data.projects.ecr.container_repository
   ecr_repository         = module.data.projects.ecr.app_repository
   github_connection_name = module.data.github_vars.my_github_connection_name
   project_bucket_name    = module.data.github_vars.general_project_bucket_name
@@ -12,8 +13,11 @@ module "app_image_builder" {
 }
 
 module "container_image_builder" {
-  source                 = "../modules/developer/codebuild/generic_container_image_builder"
-  buildspec_file_name    = "container-buildspec.yml.tpl"
+  source              = "../modules/developer/codebuild/generic_container_image_builder"
+  buildspec_file_name = "container-buildspec.yml.tpl"
+  ecr_base_repository = {
+    repository_url = "public.ecr.aws/ubuntu/ubuntu:24.10" # Adaptado para manter padrão do objeto
+  }
   ecr_repository         = module.data.projects.ecr.container_repository
   github_connection_name = module.data.github_vars.my_github_connection_name
   project_bucket_name    = module.data.github_vars.general_project_bucket_name

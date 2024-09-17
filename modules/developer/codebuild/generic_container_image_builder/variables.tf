@@ -9,6 +9,10 @@ variable "buildspec_file_name" {
   type = string
 }
 
+variable "ecr_base_repository" {
+  type = any
+}
+
 variable "ecr_repository" {
   type = any
 }
