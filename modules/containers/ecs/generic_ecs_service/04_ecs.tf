@@ -2,7 +2,7 @@
 ## ECS Task Definition
 ## ---------------------------------------------------------------------------------------------------------------------
 
-resource "aws_ecs_task_definition" "this" {
+resource "aws_ecs_task_definition" "this2" {
   
   family       = "task-${var.shortname}-2"
   track_latest = true
@@ -92,7 +92,7 @@ resource "aws_ecs_cluster" "this" {
 resource "aws_ecs_service" "this" {
   name            = "service-${var.shortname}"
   cluster         = aws_ecs_cluster.this.id
-  task_definition = aws_ecs_task_definition.this.arn
+  task_definition = aws_ecs_task_definition.this2.arn
 
 
   desired_count                      = 1
