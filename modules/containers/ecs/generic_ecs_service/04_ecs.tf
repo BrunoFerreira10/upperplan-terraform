@@ -111,7 +111,7 @@ resource "aws_ecs_service" "this" {
   task_definition = aws_ecs_task_definition.this2.arn
 
 
-  desired_count                      = 1
+  desired_count                      = 0
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
 
@@ -162,8 +162,8 @@ resource "aws_ecs_service" "this" {
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_appautoscaling_target" "this" {
-  max_capacity       = 1
-  min_capacity       = 1
+  max_capacity       = 0
+  min_capacity       = 0
   resource_id        = "service/${aws_ecs_cluster.this.name}/${aws_ecs_service.this.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
