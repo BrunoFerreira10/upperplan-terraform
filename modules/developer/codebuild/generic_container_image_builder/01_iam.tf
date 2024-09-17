@@ -113,18 +113,17 @@ resource "aws_iam_role" "codebuild" {
     Version = "2012-10-17",
     Statement = [
       {
-        "Action" : "sts:AssumeRole",
+        "Effect" : "Allow",
         "Principal" : {
           "Service" : "codebuild.amazonaws.com"
         },
-        "Effect" : "Allow",
-        "Sid" : ""
+        "Action" : "sts:AssumeRole"
       }
     ]
   })
 
   tags = {
-    Name = "prod-ecr-push-${var.shortname}"
+    Name = "Prod-CodeBuild-${var.shortname}-${var.project_name}-${var.region}"
   }
 }
 
