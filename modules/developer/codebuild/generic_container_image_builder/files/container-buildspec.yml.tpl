@@ -3,9 +3,7 @@ version: 0.2
 phases:
   install:
     commands:
-      - echo "Atualizando pacotes e instalando o Docker"
-      # - apt-get update
-      # - apt-get install -y docker.io
+      - echo "Install vazio"
   pre_build:
     commands:
       - echo "Logando no Amazon ECR"
@@ -15,9 +13,11 @@ phases:
       - echo "Construindo a imagem Docker"
       - export DOCKER_BUILDKIT=1
       - docker build -t ${REPOSITORY_URI}:latest .
-      - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:latest
   post_build:
     commands:
+      - echo "Taggeando a imagem Docker"
+      - docker tag ${REPOSITORY_URI}:latest ${REPOSITORY_URI}:latest
+
       - echo "Fazendo push da imagem para o Amazon ECR"
       - docker push ${REPOSITORY_URI}:latest --quiet
       
