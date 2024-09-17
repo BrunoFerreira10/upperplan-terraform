@@ -3,10 +3,6 @@
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_ecs_task_definition" "this" {
-
-  lifecycle {
-    ignore_changes = all
-  }
   
   family       = "task-${var.shortname}"
   track_latest = true
