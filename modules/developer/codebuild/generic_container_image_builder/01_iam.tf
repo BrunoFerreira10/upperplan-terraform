@@ -83,6 +83,28 @@ resource "aws_iam_policy" "start_build" {
   })
 }
 
+resource "aws_iam_policy" "ssm_read" {
+  name        = "Prod-SSMRead-${var.shortname}-${var.project_name}-${var.region}"
+  description = "Permissão para CodeBuild ler dados do parameter store."
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+          "ssm:GetParametersByPath"
+        ],
+        Resource = [
+          "*"
+        ]
+      }
+    ]
+  })
+}
+
 ## -- Role -------------------------------------------------------------------------------------------------------------
 resource "aws_iam_role" "codebuild" {
   name = "Prod-CodeBuild-${var.shortname}-${var.project_name}-${var.region}"
@@ -107,6 +129,7 @@ resource "aws_iam_role" "codebuild" {
 }
 
 ## -- Attach policies to roles -----------------------------------------------------------------------------------------
+
 resource "aws_iam_role_policy_attachment" "connections_to_codebuild" {
   policy_arn = aws_iam_policy.connections.arn
   role       = aws_iam_role.codebuild.name
@@ -119,6 +142,11 @@ resource "aws_iam_role_policy_attachment" "ecr_get_and_push_to_codebuild" {
 
 resource "aws_iam_role_policy_attachment" "start_build_to_codebuild" {
   policy_arn = aws_iam_policy.start_build.arn
+  role       = aws_iam_role.codebuild.name
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_read_to_codebuild" {
+  policy_arn = aws_iam_policy.ssm_read.arn
   role       = aws_iam_role.codebuild.name
 }
 
