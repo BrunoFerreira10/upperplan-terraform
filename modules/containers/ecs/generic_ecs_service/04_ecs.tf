@@ -4,7 +4,7 @@
 
 resource "aws_ecs_task_definition" "this" {
   
-  family       = "task-${var.shortname}"
+  family       = "task-${var.shortname}-2"
   track_latest = true
 
   runtime_platform {
