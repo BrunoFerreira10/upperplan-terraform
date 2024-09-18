@@ -33,7 +33,7 @@ Imabem 'Aplicação': https://github.com/BrunoFerreira10/upperplan-app.git<br>
 
 <table>
   <tr>
-    <th colspan="2" style="text-align: right;">APP_REPOSITORY_URL</th>
+    <td colspan="2" style="text-align: right;">APP_REPOSITORY_URL</td>
   </tr>
   <tr>
     <td style="text-align: right;">git@github.com:BrunoFerreira10/upperplan-app.git</td>
