@@ -24,9 +24,9 @@ Com isso é possível criar e destruir os recursos de forma individual.
 8. No Github Code, fazer o clone **do seu projeto** para sua máquina, agora pode fazer suas edições.
 
 ## Repositorios adicionais
-Os repositorios abaixo complementam esse projeto, também faço o fork/clone deles e os configure nas 'Variables' do Github Actions.
-Imagem 'Server': https://github.com/BrunoFerreira10/upperplan-container.git
-Imabem 'Aplicação': https://github.com/BrunoFerreira10/upperplan-app.git
+Os repositorios abaixo complementam esse projeto, também faço o fork/clone deles e os configure nas 'Variables' do Github Actions.<br>
+Imagem 'Server': https://github.com/BrunoFerreira10/upperplan-container.git<br>
+Imabem 'Aplicação': https://github.com/BrunoFerreira10/upperplan-app.git<br>
 
 ## Variavéis e Secrets configuradas no Github Actions
 ### Github Vars
