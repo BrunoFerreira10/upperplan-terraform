@@ -1,6 +1,6 @@
 # Sobre o projeto
 ## Descrição
-Implementação de sistema Wordpress na AWS usando IaC Terraform e repositório no 
+Implementação de sistema GLPI na AWS usando IaC Terraform e repositório no 
 Github.<br>
 Execução dos scripts Terraform através do Github Actions.
 
@@ -9,20 +9,30 @@ O projeto conta com vários **'sub-projetos'** Terraform, os quais se comunicam
 usando um **'remote state'** alocado em um S3.<br>
 Com isso é possível criar e destruir os recursos de forma individual.
 
-# Requisitos
+# Passo a passo para reproduzir o projeto
+  - 1. No Github Code, fazer o fork desse projeto para sua conta.
+  - 2. Na console da AWS, criar usuário 'Terraform' com acesso CLI e politicas de admintração do ambiente. 
+  - 3. Na console da AWS. criar par de chaves SSH para conectar nas EC2.
+  - 4. Na console da AWS, criar HostedZone (Router 53) com o dominio que será utilizado.
+  - 5. No Github Actions, criar Gihub Actions Varibles e Secrets, conforme tabela adiante.
+  - 6. No Github Actions, executar workflow 'S2 - Sub-project: Single Run'
+    - Input 1 - Resource =  '0'
+    - Input 2 - Deixar vazio
+    - Input 3 - 'y'
+  - 7. No Github Actions, executar workflow 'C1 - Whole project: Create'
+    - Input 1 - 'y'
+  - 8. No Github Code, fazer o clone **do seu projeto** para sua máquina, agora pode fazer suas edições.
 
-## Requisitos da AWS
-  - Usuário 'Terraform' com acesso CLI e politicas de admintração do ambiente. 
-  - Chave ssh criada para acesso via ssh.
-  - Dominio e HostedZone (Router 53) previamente criados.
-
-## Variavéis e Secrets configuradas no Github Actions
-### Github Vars
+# Variavéis e Secrets configuradas no Github Actions
+## Github Vars
 | Variável                        | Exemplo                                               | Detalhes |
 | :---                            | :---                                                  | :---     |
-| APP_REPOSITORY_URL              | git@github.com:BrunoFerreira10/blogupper-app.git      | Link ssh do repositório da aplicação
-| APP_REPOSITORY_URL              | https://${var.shortname}/prod/github.com/BrunoFerreira10/blogupper-app.git  | Link https do repositório da aplicação
+| APP_REPOSITORY_URL              | git@github.com:BrunoFerreira10/upperplan-app.git            | Link ssh do repositório da aplicação
+| APP_REPOSITORY_URL_HTTPS        | https://github.com/BrunoFerreira10/upperplan-app.git        | Link https do repositório da aplicação
+| CONTAINER_REPOSITORY_URL        | git@github.com:BrunoFerreira10/upperplan-container.git      | Link ssh do repositório da aplicação
+| CONTAINER_REPOSITORY_URL_HTTPS  | https://github.com/BrunoFerreira10/upperplan-container.git  | Link https do repositório da aplicação
 | EC2_SSH_KEYPAIR_NAME            | your-key-pair-name                                    | Nome do par de chaves usado para acesso aos Bastion Host
+| GENERAL_MY_IP                   | 199.99.99.999                                         | Ip para acesso aos Bastion hosts
 | GENERAL_REGION                  | us-east-1                                             | Região da implementação
 | GENERAL_PROJECT_BUCKET_NAME     | your-remote-state-bucket-name                         | Nome do bucket para dados da infraestrutura e aplicação
 | GENERAL_TAG_AUTHOR              | Bruno Ferreira                                        | Autor das edições - Gera Tag em todos recursos
@@ -37,10 +47,9 @@ Com isso é possível criar e destruir os recursos de forma individual.
 | RT53_DOMAIN                     | brunoferreira86dev.com                                | Dominio da aplicação
 
 
-### Github Secrets
+## Github Secrets
 | Variável                                | Exemplo                   | Detalhes |
 | :---                                    | :---------------          | :---     |
 | EC2_SSH_PRIVATE_KEY                     |                           | Sua chave SSH para acesso ao Bastion host
-| GENERAL_MY_IP                           | 199.99.99.999             | Ip para acesso aos Bastion hosts
 | IAM_AWS_SECRET_ACCESS_KEY               |                           | AWS Secret access Key do usuário Terraform
 | RDS_1_DB_PASSWORD                       | your-rds-password         | Senha do RDS.
