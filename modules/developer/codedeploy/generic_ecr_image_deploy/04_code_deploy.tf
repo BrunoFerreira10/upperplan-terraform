@@ -51,6 +51,12 @@ resource "aws_codedeploy_deployment_group" "this" {
         ]
       }
 
+      test_traffic_route {
+        listener_arns = [
+          var.lb_listeners.https.arn
+        ]
+      }
+
       target_group {
         name = var.target_groups.blue.name
       }
