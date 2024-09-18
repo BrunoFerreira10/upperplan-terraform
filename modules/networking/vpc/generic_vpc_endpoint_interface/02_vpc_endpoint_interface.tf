@@ -1,10 +1,11 @@
-resource "aws_vpc_endpoint" "codedeploy" {
+resource "aws_vpc_endpoint" "this" {
   vpc_id            = var.vpc.id
-  service_name      = "com.amazonaws.${var.region}.codedeploy-commands-secure"
+  # service_name      = "com.amazonaws.${var.region}.codedeploy-commands-secure"
+  service_name      = "com.amazonaws.${var.region}.${var.service_name_sufix}"
   vpc_endpoint_type = "Interface"
   
   security_group_ids = [
-    module.sg_vpc_endpoint_codedeploy_rules.security_group.id
+    module.sg_vpc_endpoint_interface_rules.security_group.id
   ]
 
   subnet_ids = [
@@ -12,17 +13,9 @@ resource "aws_vpc_endpoint" "codedeploy" {
     : subnet.id
   ]
 
-  # dynamic subnet_configuration {
-  #   for_each =  var.vpc.subnets.private
-    
-  #   content {
-  #     subnet_id = subnet_configuration.value.id
-  #   }
-  # }
-
   private_dns_enabled = true
 
   tags = {
-    Name = "codedeploy_${var.shortname}"
+    Name = "${var.shortname}_interface_${var.service_name_sufix}"
   }
 }

@@ -1,4 +1,4 @@
-variable "sg_vpc_endpoint_codedeploy_rules" {
+variable "sg_vpc_endpoint_interface_rules" {
   description = "Rules for VPC Endpoint"
   type = any
 }
@@ -6,6 +6,11 @@ variable "sg_vpc_endpoint_codedeploy_rules" {
 variable "region" {
   type        = string
   description = "Região onde a infraestrutura será criada."
+}
+
+variable "service_name_sufix" {
+  type        = string
+  description = "Nome do serviço que será acessado pelo VPC Endpoint."
 }
 
 variable "shortname" {
