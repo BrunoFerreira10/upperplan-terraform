@@ -40,98 +40,98 @@ Imabem 'Aplicação': https://github.com/BrunoFerreira10/upperplan-app.git<br>
     <td style="text-align: right;">Link ssh do repositório da aplicação</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">APP_REPOSITORY_URL_HTTPS</th>
+    <td colspan="2" style="text-align: right;">APP_REPOSITORY_URL_HTTPS</td>
   </tr>
   <tr>
     <td style="text-align: right;">https://github.com/BrunoFerreira10/upperplan-app.git</td>
     <td style="text-align: right;">Link https do repositório da aplicação</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">CONTAINER_REPOSITORY_URL</th>
+    <td colspan="2" style="text-align: right;">CONTAINER_REPOSITORY_URL</td>
   </tr>
   <tr>
     <td style="text-align: right;">git@github.com:BrunoFerreira10/upperplan-container.git</td>
     <td style="text-align: right;">Link ssh do repositório do container</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">CONTAINER_REPOSITORY_URL_HTTPS</th>
+    <td colspan="2" style="text-align: right;">CONTAINER_REPOSITORY_URL_HTTPS</td>
   </tr>
   <tr>
     <td style="text-align: right;">https://github.com/BrunoFerreira10/upperplan-container.git</td>
     <td style="text-align: right;">Link https do repositório do container</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">GENERAL_REGION</th>
+    <td colspan="2" style="text-align: right;">GENERAL_REGION</td>
   </tr>
   <tr>
     <td style="text-align: right;">us-east-1</td>
     <td style="text-align: right;">Região da implementação</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">GENERAL_PROJECT_BUCKET_NAME</th>
+    <td colspan="2" style="text-align: right;">GENERAL_PROJECT_BUCKET_NAME</td>
   </tr>
   <tr>
     <td style="text-align: right;">your-remote-state-bucket-name</td>
     <td style="text-align: right;">Nome do bucket para dados da infraestrutura e aplicação</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">GENERAL_TAG_AUTHOR</th>
+    <td colspan="2" style="text-align: right;">GENERAL_TAG_AUTHOR</td>
   </tr>
   <tr>
     <td style="text-align: right;">Bruno Ferreira</td>
     <td style="text-align: right;">Autor das edições - Gera Tag em todos recursos</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">GENERAL_TAG_CUSTOMER</th>
+    <td colspan="2" style="text-align: right;">GENERAL_TAG_CUSTOMER</td>
   </tr>
   <tr>
     <td style="text-align: right;">BlogUpper</td>
     <td style="text-align: right;">Cliente do projeto - Gera Tag em todos recursos</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">GENERAL_TAG_PROJECT</th>
+    <td colspan="2" style="text-align: right;">GENERAL_TAG_PROJECT</td>
   </tr>
   <tr>
     <td style="text-align: right;">blogupper-terraform</td>
     <td style="text-align: right;">Nome do projeto - Gera Tag em todos recursos</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">GENERAL_TAG_SHORTNAME</th>
+    <td colspan="2" style="text-align: right;">GENERAL_TAG_SHORTNAME</td>
   </tr>
   <tr>
     <td style="text-align: right;">blogupper</td>
     <td style="text-align: right;">Nome curto para nomeação dos recursos</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">IAM_AWS_ACCESS_KEY_ID</th>
+    <td colspan="2" style="text-align: right;">IAM_AWS_ACCESS_KEY_ID</td>
   </tr>
   <tr>
     <td style="text-align: right;">AKHXXDDFFDSDD76JGJJKJ</td>
     <td style="text-align: right;">AWS Access Key Id do usuário 'Terraform'</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">MY_GITHUB_CONNECTION_NAME</th>
+    <td colspan="2" style="text-align: right;">MY_GITHUB_CONNECTION_NAME</td>
   </tr>
   <tr>
     <td style="text-align: right;">github_apss_connection_name</td>
     <td style="text-align: right;">Nome da conexão com o GitHub criada na console</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">RDS_1_DB_NAME</th>
+    <td colspan="2" style="text-align: right;">RDS_1_DB_NAME</td>
   </tr>
   <tr>
     <td style="text-align: right;">db_blogupper</td>
     <td style="text-align: right;">Nome do banco de dados no RDS</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">RDS_1_DB_USERNAME</th>
+    <td colspan="2" style="text-align: right;">RDS_1_DB_USERNAME</td>
   </tr>
   <tr>
     <td style="text-align: right;">blogupper_rootuser</td>
     <td style="text-align: right;">Nome do usuário do RDS</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">RT53_DOMAIN</th>
+    <td colspan="2" style="text-align: right;">RT53_DOMAIN</td>
   </tr>
   <tr>
     <td style="text-align: right;">brunoferreira86dev.com</td>
@@ -144,14 +144,14 @@ Imabem 'Aplicação': https://github.com/BrunoFerreira10/upperplan-app.git<br>
 ### Github Secrets
 <table>
   <tr>
-    <th colspan="2" style="text-align: right;">IAM_AWS_SECRET_ACCESS_KEY</th>
+    <td colspan="2" style="text-align: right;">IAM_AWS_SECRET_ACCESS_KEY</td>
   </tr>
   <tr>
     <td style="text-align: right;"></td>
     <td style="text-align: right;">AWS Secret access Key do usuário Terraform</td>
   </tr>
   <tr>
-    <th colspan="2" style="text-align: right;">RDS_1_DB_PASSWORD</th>
+    <td colspan="2" style="text-align: right;">RDS_1_DB_PASSWORD</td>
   </tr>
   <tr>
     <td style="text-align: right;">your-rds-password</td>
