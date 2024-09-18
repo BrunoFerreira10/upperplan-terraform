@@ -1,15 +1,15 @@
-# Sobre o projeto
-## Descrição
+## Sobre o projeto
+### Descrição
 Implementação de sistema GLPI na AWS usando IaC Terraform e repositório no 
 Github.<br>
 Execução dos scripts Terraform através do Github Actions.
 
-## Estrutura
+### Estrutura
 O projeto conta com vários **'sub-projetos'** Terraform, os quais se comunicam 
 usando um **'remote state'** alocado em um S3.<br>
 Com isso é possível criar e destruir os recursos de forma individual.
 
-# Passo a passo para reproduzir o projeto
+## Passo a passo para reproduzir o projeto
 1. No Github Code, fazer o fork desse projeto para sua conta.
 2. Na console da AWS, criar usuário 'Terraform' com acesso CLI e politicas de admintração do ambiente. 
 3. Na console da AWS. criar par de chaves SSH para conectar nas EC2.
@@ -23,13 +23,13 @@ Com isso é possível criar e destruir os recursos de forma individual.
   - Input 1 - 'y'
 8. No Github Code, fazer o clone **do seu projeto** para sua máquina, agora pode fazer suas edições.
 
-# Repositorios adicionais
+## Repositorios adicionais
 Os repositorios abaixo complementam esse projeto, também faço o fork/clone deles e os configure nas 'Variables' do Github Actions.
 Imagem 'Server': https://github.com/BrunoFerreira10/upperplan-container.git
 Imabem 'Aplicação': https://github.com/BrunoFerreira10/upperplan-app.git
 
-# Variavéis e Secrets configuradas no Github Actions
-## Github Vars
+## Variavéis e Secrets configuradas no Github Actions
+### Github Vars
 
 <table>
   <tr>
@@ -141,7 +141,7 @@ Imabem 'Aplicação': https://github.com/BrunoFerreira10/upperplan-app.git
 
 
 
-## Github Secrets
+### Github Secrets
 <table>
   <tr>
     <th colspan="2" style="text-align: right;">IAM_AWS_SECRET_ACCESS_KEY</th>
