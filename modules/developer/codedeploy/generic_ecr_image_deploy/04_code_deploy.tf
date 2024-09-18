@@ -47,13 +47,13 @@ resource "aws_codedeploy_deployment_group" "this" {
     target_group_pair_info {
       prod_traffic_route {
         listener_arns = [
-          var.lb_listeners.https.arn
+          var.lb_listeners.https_blue.arn
         ]
       }
 
       test_traffic_route {
         listener_arns = [
-          var.lb_listeners.https.arn
+          var.lb_listeners.https_green.arn
         ]
       }
 
