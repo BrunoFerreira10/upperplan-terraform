@@ -15,6 +15,7 @@ output "lb_listeners" {
   description = "Listener"
   value = {
     http = aws_lb_listener.http,
-    https = aws_lb_listener.https
+    https_blue = aws_lb_listener.https_blue,
+    https_green = aws_lb_listener.https_green,
   }  
 }

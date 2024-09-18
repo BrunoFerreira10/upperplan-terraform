@@ -39,18 +39,13 @@ resource "aws_lb_listener" "http" {
     }
   }
 
-  # default_action {
-  #   type             = "forward"
-  #   target_group_arn = aws_lb_target_group.blue.arn
-  # }
-
   tags = {
     Name = "listener_http_${var.shortname}"
   }
 }
 
-# Listener HTTPS
-resource "aws_lb_listener" "https" {
+# Listener HTTPS Blue
+resource "aws_lb_listener" "https_blue" {
   load_balancer_arn = aws_lb.this.arn
   port              = "443"
   protocol          = "HTTPS"
@@ -63,7 +58,25 @@ resource "aws_lb_listener" "https" {
   }
 
   tags = {
-    Name = "listener_https_${var.shortname}"
+    Name = "listener_https_blue_${var.shortname}"
+  }
+}
+
+# Listener HTTPS Green
+resource "aws_lb_listener" "https_green" {
+  load_balancer_arn = aws_lb.this.arn
+  port              = "8443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn   = var.acm_certificate.arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.green.arn
+  }
+
+  tags = {
+    Name = "listener_https_green_${var.shortname}"
   }
 }
 
