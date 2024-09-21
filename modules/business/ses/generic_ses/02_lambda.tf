@@ -2,13 +2,26 @@
 ## Lambda - Função que processa e-mails do SES e envia para o GLPI
 ## ---------------------------------------------------------------------------------------------------------------------
 
-# - Função Lambda -----------------------------------------------------------------------------------------------
-data "archive_file" "lambda_zip" {
-  type        = "zip"
-  source_file = "${path.module}/files/create-ticket.py"
-  output_path = "${path.module}/files/create-ticket.zip"
+# - Preparar o pacote Lambda com dependências --------------------------------------------------------------------------
+resource "null_resource" "package_lambda" {
+  provisioner "local-exec" {
+    command = <<EOT
+    mkdir -p ${path.module}/build
+    pip install requests -t ${path.module}/build
+    cp ${path.module}/files/create-ticket.py ${path.module}/build/
+    EOT
+  }
 }
 
+data "archive_file" "lambda_zip" {
+  type        = "zip"
+  source_dir  = "${path.module}/build"
+  output_path = "${path.module}/files/create-ticket.zip"
+
+  depends_on = [null_resource.package_lambda]
+}
+
+# - Função Lambda -----------------------------------------------------------------------------------------------------
 resource "aws_lambda_function" "create_ticket" {
   function_name = "${var.shortname}-create-ticket"
   role          = aws_iam_role.lambda_ses_role.arn
