@@ -27,7 +27,7 @@ resource "aws_ses_receipt_rule" "this" {
 
   # Ação para acionar a Lambda quando um e-mail for recebido
   lambda_action {
-    function_arn   = aws_lambda_function.create_ticket_lambda.arn
+    function_arn   = aws_lambda_function.create_ticket.arn
     invocation_type = "Event"
     position       = 1
   }
