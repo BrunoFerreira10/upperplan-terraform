@@ -1,19 +1,41 @@
 variable "email_domain" {
-  description = "The domain to be used for the SES identity"
+  description = "O domínio que será utilizado para o SES"
   type        = string
+}
+
+variable "glpi_api_url" {
+  description = "URL da API do GLPI"
+  type        = string
+}
+
+variable "glpi_app_token" {
+  description = "Token da aplicação utilizado na API do GLPI"
+  type        = string
+}
+
+variable "glpi_password" {
+  description = "Senha para autenticação na API do GLPI"
+  type        = string
+  sensitive   = true
+}
+
+variable "glpi_username" {
+  description = "Usuário para autenticação na API do GLPI"
+  type        = string
+  sensitive   = true
 }
 
 variable "project_bucket_name" {
+  description = "Nome do bucket S3 onde serão armazenados os e-mails recebidos"
   type        = string
-  description = "Bucket name onde está o remote state"
 }
 
 variable "region" {
+  description = "Região onde os recursos serão provisionados"
   type        = string
-  description = "Região onde a infraestrutura será criada."
 }
 
 variable "shortname" {
-  description = "Nome curto para identificacao dos recursos"
+  description = "Nome curto para identificação dos recursos"
   type        = string
 }
