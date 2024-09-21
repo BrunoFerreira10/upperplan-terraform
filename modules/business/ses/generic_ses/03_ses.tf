@@ -12,6 +12,12 @@ resource "aws_ses_domain_dkim" "this" {
   domain = aws_ses_domain_identity.this.domain
 }
 
+# - Verificação do domínio SES -----------------------------------------------------------------------------------------
+resource "aws_ses_domain_identity_verification" "this" {
+  domain = aws_ses_domain_identity.this.domain
+  depends_on = [aws_ses_domain_identity.this]
+}
+
 # - Conjunto de regras de recebimento de e-mails -----------------------------------------------------------------------
 resource "aws_ses_receipt_rule_set" "this" {
   rule_set_name = "${var.shortname}-rule-set"
@@ -20,7 +26,7 @@ resource "aws_ses_receipt_rule_set" "this" {
 # - Regra de recebimento de e-mails - Acionando a Lambda ---------------------------------------------------------------
 resource "aws_ses_receipt_rule" "this" {
   rule_set_name = aws_ses_receipt_rule_set.this.rule_set_name
-  name          = "${var.shortname}-receipt-rule"
+  name          = "${var.shortname}-active-receipt-rule"
   recipients    = ["suporte@${var.email_domain}"]
   enabled       = true
   scan_enabled  = true
@@ -40,8 +46,7 @@ resource "aws_ses_receipt_rule" "this" {
   }
 }
 
-# - Verificação do domínio SES -----------------------------------------------------------------------------------------
-resource "aws_ses_domain_identity_verification" "this" {
-  domain = aws_ses_domain_identity.this.domain
-  depends_on = [aws_ses_domain_identity.this]
+# - Ativar o conjunto de regras de recebimento ------------------------------------------------------------------------
+resource "aws_ses_active_receipt_rule_set" "this" {
+  rule_set_name = aws_ses_receipt_rule_set.this.rule_set_name
 }
