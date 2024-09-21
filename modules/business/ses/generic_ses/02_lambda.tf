@@ -5,7 +5,7 @@
 # - Função Lambda -----------------------------------------------------------------------------------------------
 data "archive_file" "lambda_zip" {
   type        = "zip"
-  source_file = "${path.module}/files/create-ticket.py.tpl"
+  source_file = "${path.module}/files/create-ticket.py"
   output_path = "${path.module}/files/create-ticket.zip"
 }
 
