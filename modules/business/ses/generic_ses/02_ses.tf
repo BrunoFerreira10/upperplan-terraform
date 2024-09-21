@@ -24,13 +24,7 @@ resource "aws_ses_receipt_rule" "this" {
   name          = "${var.shortname}-rule-suporte-inbox"
   recipients    = ["suporte@${var.email_domain}"]
   enabled       = true
-  scan_enabled  = true  
-
-  s3_action {
-    bucket_name      = var.project_bucket_name
-    object_key_prefix = "emails/suporte-inbox/"
-    position         = 1
-  }
+  scan_enabled  = true
 }
 
 ## ---------------------------------------------------------------------------------------------------------------------
