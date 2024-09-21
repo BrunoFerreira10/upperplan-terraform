@@ -15,7 +15,7 @@ module "ses" {
 # Armazenar Access Key no SSM Parameter Store
 module "save_ses_user_access_key_id" {
   source      = "../modules/management/ssm/generic_save_parameter"
-  is_secure   = true
+  is_secure   = false
   param_name  = "/${var.general_tag_shortname}/prod/app_vars/ses-user/access-key-id"
   param_value = module.ses.ses_user_access_key_id
 
@@ -25,7 +25,7 @@ module "save_ses_user_access_key_id" {
 # Armazenar Secret Access Key no SSM Parameter Store
 module "save_ses_user_secret_access_key" {
   source      = "../modules/management/ssm/generic_save_parameter"
-  is_secure   = true
+  is_secure   = false
   param_name  = "/${var.general_tag_shortname}/prod/app_vars/ses-user/secret-access-key"
   param_value = module.ses.ses_user_secret_access_key
 

@@ -13,12 +13,12 @@
 
 # Outputs para visualizar as chaves de acesso
 output "ses_user_access_key_id" {
-  value = nonsensitive(aws_iam_access_key.ses_smtp_access_key)
+  value = nonsensitive(aws_iam_access_key.ses_smtp_access_key.id)
   sensitive = false
 }
 
 output "ses_user_secret_access_key" {
-  value = nonsensitive(aws_iam_access_key.ses_smtp_access_key)
+  value = nonsensitive(aws_iam_access_key.ses_smtp_access_key.secret)
   sensitive = false
 }
 ## ---------------------------------------------------------------------------------------------------------------------
