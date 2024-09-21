@@ -31,4 +31,14 @@ module "save_ses_user_secret_access_key" {
 
   depends_on = [module.ses]
 }
+
+# Armazenar SMTP Password no SSM Parameter Store
+module "save_ses_user_smtp_password_v4" {
+  source      = "../modules/management/ssm/generic_save_parameter"
+  is_secure   = false
+  param_name  = "/${var.general_tag_shortname}/prod/app_vars/ses-user/smtp-password-v4"
+  param_value = module.ses.ses_user_smtp_password_v4
+
+  depends_on = [module.ses]
+}
 ## ---------------------------------------------------------------------------------------------------------------------
