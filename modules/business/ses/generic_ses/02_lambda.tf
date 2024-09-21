@@ -23,8 +23,8 @@ resource "aws_lambda_function" "create_ticket" {
     variables = {
       GLPI_API_URL       = var.glpi_api_url
       GLPI_USERNAME      = var.glpi_username
-      GLPI_PASSWORD      = var.glpi_password
-      GLPI_APP_TOKEN     = var.glpi_app_token
+      GLPI_PASSWORD      = data.aws_ssm_parameter.glpi_password.value
+      GLPI_APP_TOKEN     = data.aws_ssm_parameter.glpi_app_token.value
     }
   }
 

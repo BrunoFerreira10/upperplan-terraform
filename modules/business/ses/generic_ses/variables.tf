@@ -8,17 +8,6 @@ variable "glpi_api_url" {
   type        = string
 }
 
-variable "glpi_app_token" {
-  description = "Token da aplicação utilizado na API do GLPI"
-  type        = string
-}
-
-variable "glpi_password" {
-  description = "Senha para autenticação na API do GLPI"
-  type        = string
-  sensitive   = true
-}
-
 variable "glpi_username" {
   description = "Usuário para autenticação na API do GLPI"
   type        = string
