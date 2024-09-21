@@ -7,6 +7,11 @@ resource "aws_ses_domain_identity" "this" {
   domain = var.email_domain
 }
 
+# - Autenticação e criptografia segura para o email --------------------------------------------------------------------
+resource "aws_ses_domain_dkim" "this" {
+  domain = aws_ses_domain_identity.this.domain
+}
+
 # - Conjunto de regras de recebimento de e-mails -----------------------------------------------------------------------
 resource "aws_ses_receipt_rule_set" "this" {
   rule_set_name = "${var.shortname}-rule-set"

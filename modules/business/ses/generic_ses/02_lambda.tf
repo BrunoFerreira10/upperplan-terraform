@@ -36,6 +36,6 @@ resource "aws_lambda_function" "create_ticket" {
 resource "aws_lambda_permission" "allow_ses_invoke" {
   statement_id  = "AllowExecutionFromSES"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.create_ticket_lambda.function_name
+  function_name = aws_lambda_function.create_ticket.function_name
   principal     = "ses.amazonaws.com"
 }
