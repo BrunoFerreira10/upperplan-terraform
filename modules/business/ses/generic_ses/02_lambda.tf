@@ -34,6 +34,7 @@ resource "aws_lambda_function" "create_ticket" {
   role          = aws_iam_role.lambda_ses_role.arn
   handler       = "create-ticket.lambda_handler"
   runtime       = "python3.12"
+  timeout       = 60
 
   # Caminho do código da função Lambda
   filename = "${path.module}/files/create-ticket.zip"
@@ -41,11 +42,11 @@ resource "aws_lambda_function" "create_ticket" {
   # Variáveis de ambiente que serão usadas pela função Lambda
   environment {
     variables = {
-      GLPI_API_URL       = var.glpi_api_url
-      GLPI_USERNAME      = var.glpi_username
-      GLPI_PASSWORD      = data.aws_ssm_parameter.glpi_password.value
-      GLPI_APP_TOKEN     = data.aws_ssm_parameter.glpi_app_token.value
-      S3_BUCKET_NAME     = var.project_bucket_name
+      GLPI_API_URL   = var.glpi_api_url
+      GLPI_USERNAME  = var.glpi_username
+      GLPI_PASSWORD  = data.aws_ssm_parameter.glpi_password.value
+      GLPI_APP_TOKEN = data.aws_ssm_parameter.glpi_app_token.value
+      S3_BUCKET_NAME = var.project_bucket_name
     }
   }
 

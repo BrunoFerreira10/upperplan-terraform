@@ -4,6 +4,8 @@ import os
 import time
 import boto3
 from requests.auth import HTTPBasicAuth
+from email import policy
+from email.parser import BytesParser
 
 # Inicializar o cliente S3
 s3 = boto3.client('s3')
@@ -12,13 +14,51 @@ def get_email_from_s3(bucket_name, object_key, max_retries=5, wait_time=5):
     for attempt in range(max_retries):
         try:
             response = s3.get_object(Bucket=bucket_name, Key=object_key)
-            return response['Body'].read().decode('utf-8')
+            return response['Body'].read()
         except s3.exceptions.NoSuchKey:
             print(f"Tentativa {attempt + 1}: Arquivo ainda não disponível no S3, aguardando...")
             time.sleep(wait_time)
     raise Exception("O arquivo não foi encontrado no S3 após várias tentativas")
 
-# Versão 3 com integração S3
+def extract_message_content(email_content):
+    try:
+        print("Iniciando o processamento do conteúdo do e-mail...")
+
+        # Utilizar o BytesParser para processar o conteúdo MIME
+        msg = BytesParser(policy=policy.default).parsebytes(email_content)
+        print("Parser MIME concluído com sucesso.")
+
+        # Verificar se o e-mail é multipart (contém várias partes, como plain text e HTML)
+        if msg.is_multipart():
+            print("O e-mail é multipart. Iterando pelas partes do e-mail...")
+
+            for part in msg.iter_parts():
+                content_type = part.get_content_type()
+                print(f"Encontrada parte com tipo de conteúdo: {content_type}")
+
+                # Verificar se a parte é de texto simples
+                if content_type == 'text/plain':
+                    print("Parte de texto simples encontrada. Extraindo conteúdo...")
+                    return part.get_payload(decode=True).decode('utf-8')
+                # Opcional: usar o HTML como fallback, se necessário
+                elif content_type == 'text/html':
+                    print("Parte HTML encontrada. Extraindo conteúdo...")
+                    return part.get_payload(decode=True).decode('utf-8')
+        else:
+            print("O e-mail não é multipart. Extraindo conteúdo diretamente...")
+            # Se não for multipart, processar diretamente o payload do e-mail
+            return msg.get_payload(decode=True).decode('utf-8')
+
+    except Exception as e:
+        # Captura qualquer erro que ocorra durante o processamento do conteúdo do e-mail
+        print(f"Erro ao processar o conteúdo do e-mail: {str(e)}")
+        return f"Erro ao processar o conteúdo do e-mail: {str(e)}"
+
+    print("Nenhum corpo de mensagem válido encontrado.")
+    return "Corpo da mensagem não encontrado."
+
+
+# Versão 4 com integração S3
 def lambda_handler(event, context):
 
     time.sleep(3)  # Aguardar 3 segundos para garantir que o e-mail foi gravado no S3
@@ -45,7 +85,8 @@ def lambda_handler(event, context):
 
     try:
         # Baixar o e-mail completo do S3        
-        email_content = get_email_from_s3(bucket_name, object_key)
+        raw_email_content = get_email_from_s3(bucket_name, object_key)
+        email_content = extract_message_content(raw_email_content)
         print(f"Conteúdo do e-mail:\n{email_content}")
     except Exception as e:
         print(f"Erro ao recuperar o e-mail do S3: {str(e)}")
@@ -89,7 +130,10 @@ def lambda_handler(event, context):
     headers["Session-Token"] = session_token
 
     ticket_content = f"""
-    Chamado criado a partir do e-mail enviado por {sender}. Message ID: {message_id}
+    Message ID: {message_id}
+    
+    Chamado criado a partir via email.
+    Email: {sender}. 
 
     Descrição:
     {email_content}
