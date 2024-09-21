@@ -44,6 +44,10 @@ resource "aws_ses_receipt_rule" "this" {
     object_key_prefix = "emails/inbox-suporte/"
     position         = 2
   }
+
+  depends_on = [ 
+    aws_lambda_function.create_ticket
+   ]
 }
 
 # - Ativar o conjunto de regras de recebimento ------------------------------------------------------------------------

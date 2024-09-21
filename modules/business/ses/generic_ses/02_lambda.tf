@@ -7,9 +7,16 @@ resource "null_resource" "package_lambda" {
   provisioner "local-exec" {
     command = <<EOT
     mkdir -p ${path.module}/build
+    tree
     pip install requests -t ${path.module}/build
     cp ${path.module}/files/create-ticket.py ${path.module}/build/
+    tree
     EOT
+  }
+
+  # Isso garante que sempre seja executado.
+  triggers = {
+    always_run = "${timestamp()}"
   }
 }
 
@@ -26,7 +33,7 @@ resource "aws_lambda_function" "create_ticket" {
   function_name = "${var.shortname}-create-ticket"
   role          = aws_iam_role.lambda_ses_role.arn
   handler       = "create-ticket.lambda_handler"
-  runtime       = "python3.8"
+  runtime       = "python3.12"
 
   # Caminho do código da função Lambda
   filename = "${path.module}/files/create-ticket.zip"
@@ -38,11 +45,17 @@ resource "aws_lambda_function" "create_ticket" {
       GLPI_USERNAME      = var.glpi_username
       GLPI_PASSWORD      = data.aws_ssm_parameter.glpi_password.value
       GLPI_APP_TOKEN     = data.aws_ssm_parameter.glpi_app_token.value
+      S3_BUCKET_NAME     = var.project_bucket_name
     }
   }
 
-  # Dependência para garantir que a política esteja associada antes de criar a função Lambda
-  depends_on = [aws_iam_role_policy_attachment.lambda_ses_policy_attachment]
+  # Forçar a atualização sempre que o arquivo zip mudar
+  #source_code_hash = filebase64sha256("${path.module}/files/create-ticket.zip")
+
+  depends_on = [
+    null_resource.package_lambda,
+    data.archive_file.lambda_zip
+  ]
 }
 
 # - Permissões para o SES acionar a função Lambda -----------------------------------------------------------------
