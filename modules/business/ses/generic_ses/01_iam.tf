@@ -62,3 +62,38 @@ resource "aws_iam_role_policy_attachment" "lambda_ses_policy_attachment" {
   role       = aws_iam_role.lambda_ses_role.name
   policy_arn = aws_iam_policy.lambda_ses_policy.arn
 }
+
+## ---------------------------------------------------------------------------------------------------------------------
+## IAM - Usuário e Políticas para SES (Envio de E-mails via SMTP)
+## ---------------------------------------------------------------------------------------------------------------------
+
+# Criar o usuário IAM para o SES
+resource "aws_iam_user" "ses_smtp_user" {
+  name = "ses-smtp-user-${var.shortname}"
+}
+
+# Adicionar a política para permitir o envio de e-mails via SES
+resource "aws_iam_user_policy" "ses_smtp_user_policy" {
+  name = "SES-SMTP-UserPolicy-${var.shortname}-${var.region}"
+  user = aws_iam_user.ses_smtp_user.name
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "ses:SendEmail",
+          "ses:SendRawEmail"
+        ],
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+# Criar as credenciais de acesso (Access Key e Secret Key) para o usuário e salva no ssm.
+resource "aws_iam_access_key" "ses_smtp_access_key" {
+  user = aws_iam_user.ses_smtp_user.name
+}
+## ---------------------------------------------------------------------------------------------------------------------
