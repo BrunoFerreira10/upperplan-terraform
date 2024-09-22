@@ -7,31 +7,27 @@ module "vpc_app" {
     nacl_rules = {
       public = {
         ingress = {
-          SSH       = { rule_number = 150, cidr_block = "${data.aws_ssm_parameter.my_ip.value}/32", port = 22 },
-          HTTP      = { rule_number = 250, cidr_block = "0.0.0.0/0", port = 80 },
-          HTTPS     = { rule_number = 350, cidr_block = "0.0.0.0/0", port = 443 },
-          SMTP      = { rule_number = 450, cidr_block = "0.0.0.0/0", port = 587 },
-          EPHEMERAL = { rule_number = 9999, cidr_block = "0.0.0.0/0", from_port = 1024, to_port = 65535 }
+          HTTP      = { rule_number = 250, port = 80, cidr_block = "0.0.0.0/0" }, # ALB Listener
+          HTTPS     = { rule_number = 350, port = 443, cidr_block = "0.0.0.0/0" }, # ALB Listener
+          SMTP      = { rule_number = 450, port = 587, cidr_block = "0.0.0.0/0" }, # Confirmação Email
+          EPHEMERAL = { rule_number = 9999, from_port = 1024, to_port = 65535, cidr_block = "0.0.0.0/0" }
         },
         egress = {
-          SSH       = { rule_number = 150, port = 22 },
-          HTTP      = { rule_number = 250, cidr_block = "0.0.0.0/0", port = 80 },
-          HTTPS     = { rule_number = 350, cidr_block = "0.0.0.0/0", port = 443 },
-          SMTP      = { rule_number = 450, cidr_block = "0.0.0.0/0", port = 587 },
-          EPHEMERAL = { rule_number = 9999, cidr_block = "0.0.0.0/0", from_port = 1024, to_port = 65535 }
+          HTTP      = { rule_number = 250, port = 80 }, # ECS (TargetGroups)
+          HTTPS     = { rule_number = 350, port = 443, cidr_block = "0.0.0.0/0" }, # Marketplace
+          SMTP      = { rule_number = 450, port = 587, cidr_block = "0.0.0.0/0" }, # Envio de email (NATGW > IGW)
+          EPHEMERAL = { rule_number = 9999, from_port = 1024, to_port = 65535, cidr_block = "0.0.0.0/0" }
         }
       },
       private = {
         ingress = {
-          SSH            = { rule_number = 150, port = 22 },
-          HTTP           = { rule_number = 250, port = 80 },
-          EPHEMERAL      = { rule_number = 9999, from_port = 1024, to_port = 65535, cidr_block = "0.0.0.0/0" }
+          HTTP      = { rule_number = 250, port = 80 }, # ECS (TargetGroups)
+          EPHEMERAL = { rule_number = 9999, from_port = 1024, to_port = 65535, cidr_block = "0.0.0.0/0" }
         },
         egress = {
-          SSH       = { rule_number = 150, port = 22, cidr_block = "0.0.0.0/0" },  # USER DATA
-          HTTPS     = { rule_number = 250, port = 443, cidr_block = "0.0.0.0/0" }, # USER DATA
-          HTTP      = { rule_number = 350, port = 80, cidr_block = "0.0.0.0/0" },  # USER DATA
-          SMTP      = { rule_number = 450, cidr_block = "0.0.0.0/0", port = 587 },
+          HTTPS     = { rule_number = 250, port = 443, cidr_block = "0.0.0.0/0" }, # Marketplace
+          HTTP      = { rule_number = 350, port = 80, cidr_block = "0.0.0.0/0" },  # Marketplace
+          SMTP      = { rule_number = 450, port = 587, cidr_block = "0.0.0.0/0" }, # Envio de email (ECS > NATGW)
           EPHEMERAL = { rule_number = 9999, from_port = 1024, to_port = 65535 }
         }
       }
