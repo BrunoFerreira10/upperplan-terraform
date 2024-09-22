@@ -21,6 +21,7 @@ resource "aws_db_instance" "rds" {
   skip_final_snapshot  = true
   multi_az             = false
   availability_zone    = var.rds_configuration.availability_zone
+  apply_immediately    = true
 
   publicly_accessible = var.rds_configuration.publicly_accessible
 
