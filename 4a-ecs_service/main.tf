@@ -5,12 +5,11 @@ module "ecs" {
   region         = module.data.github_vars.general_region
   sg_ecs_service_rules = {
     ingress = {
-      HTTP  = { port = 80, cidr_ipv4 = "0.0.0.0/0" }
-      HTTPS = { port = 443, cidr_ipv4 = "0.0.0.0/0" }
+      HTTP  = { port = 80} # ECS (Target Group)      
     },
     egress = {
-      HTTP  = { port = 80, cidr_ipv4 = "0.0.0.0/0" }  // ECR
-      HTTPS = { port = 443, cidr_ipv4 = "0.0.0.0/0" } // ECR
+      HTTPS = { port = 443, cidr_ipv4 = "0.0.0.0/0" } # Marketplace
+      SMTP  = { port = 587, cidr_ipv4 = "0.0.0.0/0" } # Envio de emails
       EFS   = { port = 2049 }
       MYSQL = { port = 3306 }
     }
