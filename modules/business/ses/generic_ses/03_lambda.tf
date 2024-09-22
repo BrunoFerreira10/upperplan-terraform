@@ -107,8 +107,10 @@ resource "aws_lambda_function" "cron_send_mail" {
   # Variáveis de ambiente que serão usadas pela função Lambda
   environment {
     variables = {
-      GLPI_API_URL   = var.glpi_api_url
       GLPI_APP_TOKEN = data.aws_ssm_parameter.glpi_app_token.value
+      GLPI_API_URL   = var.glpi_api_url
+      GLPI_PASSWORD  = data.aws_ssm_parameter.glpi_password.value
+      GLPI_USERNAME  = var.glpi_username
     }
   }
 
