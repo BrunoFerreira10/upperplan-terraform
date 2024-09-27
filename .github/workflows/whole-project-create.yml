@@ -69,6 +69,15 @@ jobs:
       RESOURCE: '2d'
     secrets: inherit
 
+  ses:
+    needs: [
+      github_sync
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '2e'
+    secrets: inherit
+
   ## - Nivel 3 -----------------------------------------------------------------
 
   elb:
@@ -108,7 +117,7 @@ jobs:
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
       RESOURCE: '3d'
-    secrets: inherit    
+    secrets: inherit
 
   ## - Nivel 4 -----------------------------------------------------------------
 
