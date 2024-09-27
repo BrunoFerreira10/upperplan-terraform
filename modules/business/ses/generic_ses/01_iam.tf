@@ -69,7 +69,8 @@ resource "aws_iam_role_policy_attachment" "lambda_ses_policy_attachment" {
 
 # Criar o usuário IAM para o SES
 resource "aws_iam_user" "ses_smtp_user" {
-  name = "ses-smtp-user-${var.shortname}"
+  name          = "ses-smtp-user-${var.shortname}"
+  force_destroy = true
 }
 
 # Adicionar a política para permitir o envio de e-mails via SES
