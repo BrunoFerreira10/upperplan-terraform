@@ -15,6 +15,7 @@ resource "aws_instance" "bastion" {
   user_data = templatefile(
     "${path.module}/scripts/userdata.tftpl", {
       REGION = "${var.region}"
+      SHORTNAME = "${var.shortname}"
     }
   )
 
