@@ -9,11 +9,11 @@ on:
         type: string
         description: "Vazio aborta. Qualquer valor confirma."
 
-## -----------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 ## Create project 
-## -----------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 jobs:
-  ## - Nivel 1 -----------------------------------------------------------------
+  ## - Camada 1 --------------------------------------------------------------------------------------------------------
 
   github_sync:
     uses: ./.github/workflows/single-sub-project-run.yml
@@ -21,7 +21,7 @@ jobs:
       RESOURCE: '1a'
     secrets: inherit
 
-  ## - Nivel 2 -----------------------------------------------------------------
+  ## - Camada 2 --------------------------------------------------------------------------------------------------------
 
   vpc:
     needs: [
@@ -78,12 +78,11 @@ jobs:
       RESOURCE: '2e'
     secrets: inherit
 
-  ## - Nivel 3 -----------------------------------------------------------------
+  ## - Camada 3 --------------------------------------------------------------------------------------------------------
 
   elb:
     needs: [
-      vpc,
-      acm
+      vpc, nat_gateway, acm, cloudwatch_logs, ecr, ses
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
@@ -92,7 +91,7 @@ jobs:
 
   rds:
     needs: [
-      vpc
+      vpc, nat_gateway, acm, cloudwatch_logs, ecr, ses
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
@@ -101,8 +100,7 @@ jobs:
 
   efs:
     needs: [
-      
-      vpc
+      vpc, nat_gateway, acm, cloudwatch_logs, ecr, ses
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
@@ -111,32 +109,28 @@ jobs:
 
   container_image_builder:
     needs: [
-      ecr,
-      elb
+      vpc, nat_gateway, acm, cloudwatch_logs, ecr, ses
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
       RESOURCE: '3d'
     secrets: inherit
 
-  ## - Nivel 4 -----------------------------------------------------------------
+  ## - Camada 4 --------------------------------------------------------------------------------------------------------
 
   ecs:
     needs: [
-      vpc,
-      ecr,
-      elb, rds, efs
+      elb, rds, efs, container_image_builder
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
       RESOURCE: '4a'
     secrets: inherit
 
-  ## - Nivel 5 -----------------------------------------------------------------
+  ## - Camada 5 --------------------------------------------------------------------------------------------------------
 
   container_image_deploy:
     needs: [
-      elb,
       ecs
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
@@ -144,4 +138,4 @@ jobs:
       RESOURCE: '5a'
     secrets: inherit
 
-  ## ---------------------------------------------------------------------------
+  ## -------------------------------------------------------------------------------------------------------------------

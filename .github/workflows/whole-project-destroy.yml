@@ -1,7 +1,7 @@
 name: "D1 - Whole project: Destroy"
 run-name: "D1 - Whole project: Destroy"
 
-on: 
+on:
   workflow_dispatch:
     inputs:
       CONFIRMATION:
@@ -10,131 +10,137 @@ on:
         description: "Vazio aborta. Qualquer valor confirma."
 
 jobs:
-  #################################
-  ######## Destroy project ########
-  #################################
-  deploy_app:
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '8a'
-      ACTION: 'd'
-    secrets: inherit
-
+  ## - Ferramentas de desenvolvimento ----------------------------------------------------------------------------------
   vpc_endpoint_ssm:
+    needs: []
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '7c'
-      ACTION: 'd'
-    secrets: inherit        
-    
-  vpc_endpoint_s3:
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '7b'
-      ACTION: 'd'
-    secrets: inherit    
-
-  vpc_endpoint_codedeploy:
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '7a'
-      ACTION: 'd'
+      RESOURCE: "5a"
+      ACTION: "d"
     secrets: inherit
 
-  elb_app:
+  bastion:
+    needs: []
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '6a'
-      ACTION: 'd'
+      RESOURCE: "5a"
+      ACTION: "d"
     secrets: inherit
 
-  image_builder_app:
+  ## - Camada 5 --------------------------------------------------------------------------------------------------------
+  container_image_deploy:
+    needs: []
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: "5a"
+      ACTION: "d"
+    secrets: inherit
+
+  ## - Camada 4 --------------------------------------------------------------------------------------------------------
+
+  ecs:
+    needs: [container_image_deploy]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: "4a"
+      ACTION: "d"
+    secrets: inherit
+
+  ## - Camada 3 --------------------------------------------------------------------------------------------------------
+
+  elb:
+    needs: [ecs]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: "3a"
+      ACTION: "d"
+    secrets: inherit
+
+  rds:
+    needs: [ecs]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: "3b"
+      ACTION: "d"
+    secrets: inherit
+
+  efs:
+    needs: [ecs]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: "3c"
+      ACTION: "d"
+    secrets: inherit
+
+  container_image_builder:
+    needs: [ecs]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: "3d"
+      ACTION: "d"
+    secrets: inherit
+  
+  ## - Camada 2 --------------------------------------------------------------------------------------------------------
+  
+  nat_gateway:
+    needs: [elb, rds, efs, container_image_builder]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: "2a1"
+      ACTION: "d"
+    secrets: inherit
+
+  vpc:
     needs: [
-      elb_app
-    ]
+      vpc_endpoint_ssm, bastion,
+      elb, rds, efs, container_image_builder, nat_gateway
+      ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '4c'
-      ACTION: 'd'
+      RESOURCE: "2a"
+      ACTION: "d"
     secrets: inherit
 
-  ami_app:
-    needs: [
-      elb_app,
-      image_builder_app
-    ]
+  acm:
+    needs: [elb, rds, efs, container_image_builder]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '5a'
-      ACTION: 'd'
+      RESOURCE: "2b"
+      ACTION: "d"
     secrets: inherit
 
-  efs_app:
-    needs: [
-      elb_app,
-      image_builder_app
-    ]
+  cloudwatch_logs:
+    needs: [elb, rds, efs, container_image_builder]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '3c'
-      ACTION: 'd'
-    secrets: inherit
-      
-  rds_app:
-    needs: [
-      elb_app, 
-      image_builder_app
-    ]
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '3b'
-      ACTION: 'd'
+      RESOURCE: "2c"
+      ACTION: "d"
     secrets: inherit
 
-  bastion_vpc_app:
+  ecr:
+    needs: [elb, rds, efs, container_image_builder]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '3a'
-      ACTION: 'd'
+      RESOURCE: "2d"
+      ACTION: "d"
     secrets: inherit
 
-  acm_app:
-    needs: [
-      elb_app
-    ]
+  ses:
+    needs: [elb, rds, efs, container_image_builder]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '2c'
-      ACTION: 'd'
+      RESOURCE: "2e"
+      ACTION: "d"
     secrets: inherit
 
-  vpc_network:
-    needs: [
-      deploy_app,
-      vpc_endpoint_codedeploy, vpc_endpoint_s3, vpc_endpoint_ssm,
-      elb_app, 
-      image_builder_app,
-      efs_app, rds_app, bastion_vpc_app
-    ]
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '2a'
-      ACTION: 'd'
-    secrets: inherit
+  ## - Camada 1 --------------------------------------------------------------------------------------------------------
 
   github_sync:
-    needs: [
-      deploy_app,
-      vpc_endpoint_codedeploy, vpc_endpoint_s3, vpc_endpoint_ssm,
-      elb_app,
-      ami_app,
-      image_builder_app,
-      bastion_vpc_app,
-      rds_app, efs_app,
-      vpc_network, acm_app
-    ]
+    needs: [vpc, nat_gateway, acm, cloudwatch_logs, ecr, ses]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '1a'
-      ACTION: 'd'
+      RESOURCE: "1a"
+      ACTION: "d"
     secrets: inherit
+
+  ## -------------------------------------------------------------------------------------------------------------------
