@@ -11,21 +11,22 @@ on:
 
 jobs:
   ## - Ferramentas de desenvolvimento ----------------------------------------------------------------------------------
-  vpc_endpoint_ssm:
-    needs: []
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: "5a"
-      ACTION: "d"
-    secrets: inherit
-
+  
   bastion:
     needs: []
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: "5a"
+      RESOURCE: "dev_a"
       ACTION: "d"
     secrets: inherit
+    
+  vpc_endpoint_ssm:
+    needs: []
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: "dev_b"
+      ACTION: "d"
+    secrets: inherit 
 
   ## - Camada 5 --------------------------------------------------------------------------------------------------------
   container_image_deploy:
