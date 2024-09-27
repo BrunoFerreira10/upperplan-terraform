@@ -1,5 +1,5 @@
 resource "aws_imagebuilder_infrastructure_configuration" "this" {
-  name                          = "${var.shortname}"
+  name                          = var.shortname
   instance_types                = ["t3a.medium"]
   terminate_instance_on_failure = true
 

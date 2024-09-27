@@ -3,11 +3,11 @@
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_codedeploy_app" "this" {
-  name = "${var.shortname}-app"
+  name             = "${var.shortname}-app"
   compute_platform = "ECS"
 
   tags = {
-    Name        = "${var.shortname}-app"
+    Name = "${var.shortname}-app"
   }
 }
 

@@ -35,7 +35,7 @@ resource "aws_vpn_connection" "site_to_site" {
 
 # Definindo rotas VPN
 resource "aws_vpn_connection_route" "route" {
-  vpn_connection_id = aws_vpn_connection.site_to_site.id
+  vpn_connection_id      = aws_vpn_connection.site_to_site.id
   destination_cidr_block = "10.0.2.0/24"
 }
 

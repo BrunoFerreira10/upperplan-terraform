@@ -4,22 +4,22 @@
 data "archive_file" "lambda_zip" {
   type        = "zip"
   source_file = "${path.module}/scripts/lambda_function.py"
-  output_path = "lambda_function.zip"  
+  output_path = "lambda_function.zip"
 }
 
-resource "aws_lambda_function" "codedeploy_trigger_lambda" {  
+resource "aws_lambda_function" "codedeploy_trigger_lambda" {
   function_name = "CodeDeployTriggerLambda"
   role          = aws_iam_role.lambda_codedeploy_role.arn
   handler       = "lambda_function.lambda_handler"
   runtime       = "python3.9"
 
-  filename         = "lambda_function.zip" 
+  filename         = "lambda_function.zip"
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
   environment {
     variables = {
-      APPLICATION_NAME       = var.codedeploy_settings.application_name
-      DEPLOYMENT_GROUP_NAME  = var.codedeploy_settings.application_name
+      APPLICATION_NAME      = var.codedeploy_settings.application_name
+      DEPLOYMENT_GROUP_NAME = var.codedeploy_settings.application_name
     }
   }
 }

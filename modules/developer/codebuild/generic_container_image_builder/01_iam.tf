@@ -4,10 +4,10 @@
 
 ## -- Policies ---------------------------------------------------------------------------------------------------------
 resource "aws_iam_policy" "connections" {
-  name = "Prod-GetConnection-${var.shortname}-${var.project_name}-${var.region}"
-  path = "/TerraformManaged/"
+  name        = "Prod-GetConnection-${var.shortname}-${var.project_name}-${var.region}"
+  path        = "/TerraformManaged/"
   description = "Policy used in trust relationship with CodeBuild and ${var.shortname} application"
-  
+
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

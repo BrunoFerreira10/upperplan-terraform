@@ -5,7 +5,7 @@ module "ecs" {
   region         = module.data.github_vars.general_region
   sg_ecs_service_rules = {
     ingress = {
-      HTTP  = { port = 80} # ECS (Target Group)      
+      HTTP = { port = 80 } # ECS (Target Group)      
     },
     egress = {
       HTTPS = { port = 443, cidr_ipv4 = "0.0.0.0/0" } # Marketplace

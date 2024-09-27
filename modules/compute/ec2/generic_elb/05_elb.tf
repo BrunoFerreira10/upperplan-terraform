@@ -1,5 +1,5 @@
 resource "aws_lb" "this" {
-  name               = replace("elb-${var.shortname}","_","-")
+  name               = replace("elb-${var.shortname}", "_", "-")
   internal           = false
   load_balancer_type = "application"
   security_groups = [

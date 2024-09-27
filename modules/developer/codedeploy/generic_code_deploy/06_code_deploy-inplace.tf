@@ -1,15 +1,15 @@
 resource "aws_codedeploy_app" "this" {
-  name = "${var.codedeploy_settings.application_name}"
+  name = var.codedeploy_settings.application_name
 
   tags = {
-    Name        = "${var.codedeploy_settings.application_name}"
+    Name = "${var.codedeploy_settings.application_name}"
     # Environment = var.environment
   }
 }
 
 resource "aws_codedeploy_deployment_group" "this" {
   app_name              = aws_codedeploy_app.this.name
-  deployment_group_name = "${var.codedeploy_settings.application_name}"
+  deployment_group_name = var.codedeploy_settings.application_name
   service_role_arn      = aws_iam_role.codedeploy.arn
 
   autoscaling_groups = [
@@ -48,7 +48,7 @@ resource "aws_codedeploy_deployment_group" "this" {
   # }
 
   tags = {
-    Name        = "${var.codedeploy_settings.application_name}"
+    Name = "${var.codedeploy_settings.application_name}"
     # Environment = var.environment
   }
 }

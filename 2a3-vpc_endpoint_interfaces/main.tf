@@ -20,8 +20,8 @@
 ## - ECS Task Start - Faz o pull do ECR Registry que depende desse endpoint
 ## ---------------------------------------------------------------------------------------------------------------------
 module "ecr_api_vpc_endpoint" {
-  source = "../modules/networking/vpc/generic_vpc_endpoint_interface"
-  region = module.data.github_vars.general_region
+  source             = "../modules/networking/vpc/generic_vpc_endpoint_interface"
+  region             = module.data.github_vars.general_region
   service_name_sufix = "ecr.api"
   sg_vpc_endpoint_interface_rules = {
     ingress = {
@@ -41,8 +41,8 @@ module "ecr_api_vpc_endpoint" {
 ## - ECS Task Start - Faz o pull do ECR Registry que depende desse endpoint
 ## ---------------------------------------------------------------------------------------------------------------------
 module "ecr_dkr_vpc_endpoint" {
-  source = "../modules/networking/vpc/generic_vpc_endpoint_interface"
-  region = module.data.github_vars.general_region
+  source             = "../modules/networking/vpc/generic_vpc_endpoint_interface"
+  region             = module.data.github_vars.general_region
   service_name_sufix = "ecr.dkr"
   sg_vpc_endpoint_interface_rules = {
     ingress = {
@@ -62,8 +62,8 @@ module "ecr_dkr_vpc_endpoint" {
 ## - ECS Task - Precisa enviar logs para o CloudWatch
 ## ---------------------------------------------------------------------------------------------------------------------
 module "logs_vpc_endpoint" {
-  source = "../modules/networking/vpc/generic_vpc_endpoint_interface"
-  region = module.data.github_vars.general_region
+  source             = "../modules/networking/vpc/generic_vpc_endpoint_interface"
+  region             = module.data.github_vars.general_region
   service_name_sufix = "logs"
   sg_vpc_endpoint_interface_rules = {
     ingress = {
@@ -83,8 +83,8 @@ module "logs_vpc_endpoint" {
 ## - ECS Container - Precisa enviar emails
 ## ---------------------------------------------------------------------------------------------------------------------
 module "email_smtp_endpoint" {
-  source = "../modules/networking/vpc/generic_vpc_endpoint_interface"
-  region = module.data.github_vars.general_region
+  source             = "../modules/networking/vpc/generic_vpc_endpoint_interface"
+  region             = module.data.github_vars.general_region
   service_name_sufix = "email-smtp"
   sg_vpc_endpoint_interface_rules = {
     ingress = {

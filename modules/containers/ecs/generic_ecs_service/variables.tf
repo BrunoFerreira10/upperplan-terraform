@@ -1,6 +1,6 @@
 variable "ecr_repository" {
   description = "ECR repository"
-  type = any
+  type        = any
 }
 
 variable "efs" {
@@ -25,7 +25,7 @@ variable "shortname" {
 
 variable "target_group" {
   description = "Target group for ECS service"
-  type        = any  
+  type        = any
 }
 
 variable "vpc" {

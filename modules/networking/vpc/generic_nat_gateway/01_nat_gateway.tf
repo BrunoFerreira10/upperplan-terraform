@@ -22,7 +22,7 @@ resource "aws_nat_gateway" "this" {
 ## Router tables
 ## -----------------------------------------------------------------------------
 resource "aws_route" "nat_gateway" {
-  depends_on = [aws_nat_gateway.this]  
+  depends_on = [aws_nat_gateway.this]
 
   route_table_id         = var.vpc.router_tables.private.id
   destination_cidr_block = "0.0.0.0/0"

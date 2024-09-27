@@ -1,12 +1,12 @@
 variable "artifact_file_name" {
   description = "Artifact file name"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
 variable "buildspec_file_name" {
   description = "Buildspec file name"
-  type = string
+  type        = string
 }
 
 variable "ecr_base_repository" {
@@ -18,16 +18,16 @@ variable "ecr_repository" {
 }
 
 variable "github_connection_name" {
-  type = string  
+  type = string
 }
 
 variable "project_bucket_name" {
-  type = string  
+  type = string
 }
 
 variable "project_name" {
   description = "Codebuild project name"
-  type        = string  
+  type        = string
 }
 
 variable "region" {

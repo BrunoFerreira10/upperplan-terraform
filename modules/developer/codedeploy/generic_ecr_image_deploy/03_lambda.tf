@@ -5,10 +5,10 @@
 data "archive_file" "this" {
   type        = "zip"
   source_file = "${path.module}/files/lambda_function.py"
-  output_path = "lambda_function.zip"  
+  output_path = "lambda_function.zip"
 }
 
-resource "aws_lambda_function" "codedeploy_trigger_lambda" {  
+resource "aws_lambda_function" "codedeploy_trigger_lambda" {
   function_name = "CodeDeployTriggerLambda-${var.shortname}"
   role          = aws_iam_role.lambda_codedeploy_role.arn
   handler       = "lambda_function.lambda_handler"
@@ -19,8 +19,8 @@ resource "aws_lambda_function" "codedeploy_trigger_lambda" {
 
   environment {
     variables = {
-      APPLICATION_NAME       = "${var.shortname}-app"
-      DEPLOYMENT_GROUP_NAME  = "${var.shortname}-app"
+      APPLICATION_NAME      = "${var.shortname}-app"
+      DEPLOYMENT_GROUP_NAME = "${var.shortname}-app"
     }
   }
 }

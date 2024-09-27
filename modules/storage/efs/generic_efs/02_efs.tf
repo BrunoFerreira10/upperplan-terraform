@@ -17,8 +17,8 @@ resource "aws_efs_file_system" "efs" {
 resource "aws_efs_mount_target" "mount_target" {
   for_each = toset(var.mount_target_subnets)
 
-  file_system_id = aws_efs_file_system.efs.id
-  subnet_id      = each.value
+  file_system_id  = aws_efs_file_system.efs.id
+  subnet_id       = each.value
   security_groups = [module.sg_efs.security_group.id]
 }
 

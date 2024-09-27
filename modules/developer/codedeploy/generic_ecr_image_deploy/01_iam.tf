@@ -85,7 +85,7 @@ data "aws_iam_policy_document" "topic" {
 
 resource "aws_iam_policy" "ecs_deploy" {
 
-  name = "CodeDeployECSDeploy-${var.shortname}-${var.region}"
+  name        = "CodeDeployECSDeploy-${var.shortname}-${var.region}"
   description = "Política para permitir que o CodeDeploy acesse o ECS e ELB"
 
   policy = jsonencode({

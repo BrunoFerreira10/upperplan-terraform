@@ -15,6 +15,6 @@ variable "vpc" {
 
 variable "sg_efs_rules" {
   description = "Rules form RDS security group"
-  type = any
+  type        = any
 }
 

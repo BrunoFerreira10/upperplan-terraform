@@ -3,7 +3,7 @@ data "aws_ssm_parameter" "my_ip" {
 }
 
 module "data" {
-  source = "../modules/data"
+  source    = "../modules/data"
   shortname = var.general_tag_shortname
   requested_data = [
     "vpc"

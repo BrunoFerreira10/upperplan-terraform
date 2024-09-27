@@ -4,11 +4,11 @@
 
 # Target Group Azul
 resource "aws_lb_target_group" "blue" {
-  name     = replace("tg-blue-${var.shortname}", "_", "-")
-  port     = 80
-  protocol = "HTTP"
+  name        = replace("tg-blue-${var.shortname}", "_", "-")
+  port        = 80
+  protocol    = "HTTP"
   target_type = "ip"
-  vpc_id   = var.vpc.id
+  vpc_id      = var.vpc.id
 
   health_check {
     enabled             = true
@@ -28,11 +28,11 @@ resource "aws_lb_target_group" "blue" {
 
 # Target Group Verde
 resource "aws_lb_target_group" "green" {
-  name     = replace("tg-green-${var.shortname}", "_", "-")
-  port     = 80
-  protocol = "HTTP"
+  name        = replace("tg-green-${var.shortname}", "_", "-")
+  port        = 80
+  protocol    = "HTTP"
   target_type = "ip"
-  vpc_id   = var.vpc.id
+  vpc_id      = var.vpc.id
 
   health_check {
     enabled             = true

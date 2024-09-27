@@ -16,8 +16,8 @@ variable "vpc_settings" {
       # ingress = map(any)
       ingress = map(object({
         rule_number = number
-        protocol    = optional(string,"tcp")
-        rule_action = optional(string,"allow")
+        protocol    = optional(string, "tcp")
+        rule_action = optional(string, "allow")
         cidr_block  = optional(string)
         port        = optional(number)
         from_port   = optional(number)
@@ -26,8 +26,8 @@ variable "vpc_settings" {
       # egress = map(any)
       egress = map(object({
         rule_number = number
-        protocol    = optional(string,"tcp")
-        rule_action = optional(string,"allow")
+        protocol    = optional(string, "tcp")
+        rule_action = optional(string, "allow")
         cidr_block  = optional(string)
         port        = optional(number)
         from_port   = optional(number)

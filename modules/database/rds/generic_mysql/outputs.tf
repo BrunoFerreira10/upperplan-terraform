@@ -13,6 +13,6 @@ output "rds" {
 }
 
 output "rds_full" {
-  value = aws_db_instance.rds
+  value     = aws_db_instance.rds
   sensitive = true
 }

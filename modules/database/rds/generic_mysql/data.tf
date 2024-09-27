@@ -6,7 +6,7 @@ data "aws_ssm_parameter" "db_password" {
 ## Get RDS private IP address
 ## --------------------------------------------------------------------------------------------------------------------
 data "aws_network_interface" "rds_eni" {
-  depends_on = [ aws_db_instance.rds ]
+  depends_on = [aws_db_instance.rds]
   filter {
     name   = "description"
     values = ["RDSNetworkInterface"]
@@ -18,7 +18,7 @@ data "aws_network_interface" "rds_eni" {
   }
 
   filter {
-    name   = "subnet-id"
+    name = "subnet-id"
     values = [
       for subnet in var.vpc.subnets.private :
       subnet.id

@@ -10,8 +10,8 @@ variable "vpc" {
 
 variable "security_group_settings" {
   description = "Security group specific settings"
-  type        = object({
-    id_name     = string 
+  type = object({
+    id_name     = string
     description = optional(string, "")
     rules = object({
       ingress = map(object({

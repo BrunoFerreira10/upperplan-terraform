@@ -3,7 +3,7 @@
 ## ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_ecs_task_definition" "this2" {
-  
+
   family       = "task-${var.shortname}-2"
   track_latest = true
 

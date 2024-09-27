@@ -1,7 +1,7 @@
 // Auto-scaling
 resource "aws_autoscaling_group" "this" {
 
-  name = replace("asg-${var.shortname}","_","-")
+  name = replace("asg-${var.shortname}", "_", "-")
 
   // Group Details  
   capacity_rebalance = true

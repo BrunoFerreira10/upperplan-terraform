@@ -1,6 +1,6 @@
 variable "image_builder" {
   description = "Image builder from AMI creation"
-  type = any
+  type        = any
 }
 
 variable "shortname" {

@@ -1,6 +1,6 @@
 variable "sg_vpc_endpoint_interface_rules" {
   description = "Rules for VPC Endpoint"
-  type = any
+  type        = any
 }
 
 variable "region" {

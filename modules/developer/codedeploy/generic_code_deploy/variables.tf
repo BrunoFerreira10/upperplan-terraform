@@ -5,7 +5,7 @@ variable "app_repository_url_https" {
 variable "codebuild_settings" {
   description = "CodeBuild project settings"
   type = object({
-    project_name = string
+    project_name           = string
     github_connection_name = string
   })
 }
@@ -14,9 +14,9 @@ variable "codedeploy_settings" {
   description = "CodeDeploy project settings"
   type = object({
     application_name = string
-    target_group = any
-    elb = any
-    asg = any
+    target_group     = any
+    elb              = any
+    asg              = any
   })
 }
 
@@ -27,7 +27,7 @@ variable "domain" {
 
 variable "project_bucket_name" {
   description = "Project bucket name"
-  type = string
+  type        = string
 }
 
 variable "rds" {
@@ -37,7 +37,7 @@ variable "rds" {
 
 variable "region" {
   description = "Região onde a infraestrutura está alocada"
-  type = string
+  type        = string
 }
 
 variable "shortname" {

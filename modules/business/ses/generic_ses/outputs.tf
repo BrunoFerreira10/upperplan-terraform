@@ -21,7 +21,7 @@ output "ses_user_secret_access_key" {
 }
 
 output "ses_user_smtp_password_v4" {
-  value = nonsensitive(aws_iam_access_key.ses_smtp_access_key.ses_smtp_password_v4)
+  value     = nonsensitive(aws_iam_access_key.ses_smtp_access_key.ses_smtp_password_v4)
   sensitive = false
 }
 ## ---------------------------------------------------------------------------------------------------------------------

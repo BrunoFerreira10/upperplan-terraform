@@ -10,7 +10,7 @@ variable "shortname" {
 
 variable "public_subnet" {
   type        = any
-  description = "Public subnet for NAT Gateway allocation."  
+  description = "Public subnet for NAT Gateway allocation."
 }
 
 variable "vpc" {

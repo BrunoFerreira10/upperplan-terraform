@@ -1,6 +1,6 @@
 variable "name" {
   description = "Log group name"
-  type        = string  
+  type        = string
 }
 
 variable "retention_in_days" {
@@ -11,5 +11,5 @@ variable "retention_in_days" {
 
 variable "shortname" {
   description = "Shortname for the log group"
-  type        = string 
+  type        = string
 }

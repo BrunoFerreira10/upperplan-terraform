@@ -81,8 +81,8 @@ resource "aws_iam_user_policy" "ses_smtp_user_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "ses:SendEmail",
           "ses:SendRawEmail"
         ],

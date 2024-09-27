@@ -7,13 +7,13 @@ module "vpc_app" {
     nacl_rules = {
       public = {
         ingress = {
-          HTTP      = { rule_number = 250, port = 80, cidr_block = "0.0.0.0/0" }, # ALB Listener
+          HTTP      = { rule_number = 250, port = 80, cidr_block = "0.0.0.0/0" },  # ALB Listener
           HTTPS     = { rule_number = 350, port = 443, cidr_block = "0.0.0.0/0" }, # ALB Listener
           SMTP      = { rule_number = 450, port = 587, cidr_block = "0.0.0.0/0" }, # Confirmação Email
           EPHEMERAL = { rule_number = 9999, from_port = 1024, to_port = 65535, cidr_block = "0.0.0.0/0" }
         },
         egress = {
-          HTTP      = { rule_number = 250, port = 80 }, # ECS (TargetGroups)
+          HTTP      = { rule_number = 250, port = 80 },                            # ECS (TargetGroups)
           HTTPS     = { rule_number = 350, port = 443, cidr_block = "0.0.0.0/0" }, # Marketplace
           SMTP      = { rule_number = 450, port = 587, cidr_block = "0.0.0.0/0" }, # Envio de email (NATGW > IGW)
           EPHEMERAL = { rule_number = 9999, from_port = 1024, to_port = 65535, cidr_block = "0.0.0.0/0" }

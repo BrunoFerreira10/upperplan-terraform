@@ -14,7 +14,7 @@ resource "aws_ses_domain_dkim" "this" {
 
 # - Verificação do domínio SES -----------------------------------------------------------------------------------------
 resource "aws_ses_domain_identity_verification" "this" {
-  domain = aws_ses_domain_identity.this.domain
+  domain     = aws_ses_domain_identity.this.domain
   depends_on = [aws_ses_domain_identity.this]
 }
 
@@ -33,21 +33,21 @@ resource "aws_ses_receipt_rule" "this" {
 
   # Ação para acionar a Lambda quando um e-mail for recebido
   lambda_action {
-    function_arn   = aws_lambda_function.create_ticket.arn
+    function_arn    = aws_lambda_function.create_ticket.arn
     invocation_type = "Event"
-    position       = 1
+    position        = 1
   }
 
   # Armazenar o e-mail recebido no S3 (opcional)
   s3_action {
-    bucket_name      = var.project_bucket_name
+    bucket_name       = var.project_bucket_name
     object_key_prefix = "emails/inbox-suporte/"
-    position         = 2
+    position          = 2
   }
 
-  depends_on = [ 
+  depends_on = [
     aws_lambda_function.create_ticket
-   ]
+  ]
 }
 
 # - Ativar o conjunto de regras de recebimento ------------------------------------------------------------------------

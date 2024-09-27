@@ -1,6 +1,6 @@
 module "ssm_vpc_endpoint" {
-  source = "../modules/networking/vpc/generic_vpc_endpoint_interface"
-  region = module.data.github_vars.general_region
+  source             = "../modules/networking/vpc/generic_vpc_endpoint_interface"
+  region             = module.data.github_vars.general_region
   service_name_sufix = "ssm"
   sg_vpc_endpoint_interface_rules = {
     ingress = {

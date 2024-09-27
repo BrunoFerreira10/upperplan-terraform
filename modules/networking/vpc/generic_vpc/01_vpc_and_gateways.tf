@@ -24,7 +24,7 @@ resource "aws_default_security_group" "default" {
 ## -----------------------------------------------------------------------------
 ## Internet Gateway
 ## -----------------------------------------------------------------------------
-resource "aws_internet_gateway" "this" {  
+resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
 
   tags = {

@@ -34,5 +34,5 @@ variable "rds_configuration" {
 
 variable "sg_rds_rules" {
   description = "Rules form RDS security group"
-  type = any
+  type        = any
 }

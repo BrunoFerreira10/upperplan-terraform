@@ -36,12 +36,12 @@ variable "vpc" {
 
 variable "rds" {
   description = "RDS from app configuration"
-  type = any
+  type        = any
 }
 
 variable "efs" {
   description = "EFS from EC2 instances"
-  type = any
+  type        = any
 }
 
 variable "sg_elb_rules" {
@@ -63,6 +63,6 @@ variable "instance_type" {
 
 variable "asg_settings" {
   type = object({
-    launch_template_version = optional(string,"$latest")
+    launch_template_version = optional(string, "$latest")
   })
 }
