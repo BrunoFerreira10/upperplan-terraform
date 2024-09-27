@@ -19,7 +19,7 @@ jobs:
       RESOURCE: "dev_a"
       ACTION: "d"
     secrets: inherit
-    
+
   vpc_endpoint_ssm:
     needs: []
     uses: ./.github/workflows/single-sub-project-run.yml
@@ -91,10 +91,27 @@ jobs:
       ACTION: "d"
     secrets: inherit
 
+  vpc_gateway_endpoints:
+    needs: [elb, rds, efs, container_image_builder]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: "2a2"
+      ACTION: "d"
+    secrets: inherit
+
+  vpc_interface_endpoints:
+    needs: [elb, rds, efs, container_image_builder]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: "2a3"
+      ACTION: "d"
+    secrets: inherit
+
   vpc:
     needs: [
       vpc_endpoint_ssm, bastion,
-      elb, rds, efs, container_image_builder, nat_gateway
+      nat_gateway, vpc_gateway_endpoints, vpc_interface_endpoints,
+      elb, rds, efs, container_image_builder, 
       ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
