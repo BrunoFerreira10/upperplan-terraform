@@ -1,5 +1,8 @@
+.env
+.config.json
 .terraform
 .terraform.lock.hcl
+.terragrunt-cache
 *.out
 *tfstate*
 .vscode
@@ -11,3 +14,4 @@ project-tree*
 
 *.off
 *.link
+

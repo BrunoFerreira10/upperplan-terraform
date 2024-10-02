@@ -1,0 +1,12 @@
+provider "aws" {
+  region = "${region}"
+  default_tags {
+    tags = {
+      "author"     = "${author}"
+      "customer"   = "${customer}"
+      "project"    = "${project}"
+      "environment"= "${env}"
+      "managed-by" = "terraform"
+    }
+  }
+}

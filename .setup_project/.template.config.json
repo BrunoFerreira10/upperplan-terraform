@@ -1,0 +1,34 @@
+{
+  "//": "Renomear esse arquivo para '.config.json' e remover essa linha de comentário.",
+  "//": "Tenha certeza ABSOLUTA que '.config.json' não será versionado em seu repositorio.",
+  "//": "Para isso, adicione '.config.json' no seu '.gitignore'.",
+  "//": "Remova essa linha de comentário e as três linhas acima.",
+  "ignored_directories": [
+    "modules"
+  ],
+  "github_required_vars": [
+    {"GENERAL_MY_IP": "your-ip-number"},
+    {"GENERAL_PROJECT_BUCKET_NAME": "your-project-bucket-name"},
+    {"GENERAL_REGION": "your-region"},
+    {"GENERAL_TAG_AUTHOR": "your-name"},
+    {"GENERAL_TAG_CUSTOMER": "your-customer-name"},
+    {"GENERAL_TAG_PROJECT": "your-project-name"},
+    {"GENERAL_TAG_SHORTNAME": "your-identification-shortname"}
+  ],  
+  "github_project_vars": [
+    {"APP_REPOSITORY_URL": "git@github.com:BrunoFerreira10/upperplan-app.git"},
+    {"APP_REPOSITORY_URL_HTTPS": "https://github.com/BrunoFerreira10/upperplan-app.git"},
+    {"CONTAINER_REPOSITORY_URL": "git@github.com:BrunoFerreira10/upperplan-container.git"},
+    {"CONTAINER_REPOSITORY_URL_HTTPS": "https://github.com/BrunoFerreira10/upperplan-container.git"},
+    {"EC2_SSH_KEYPAIR_NAME": "aws-services-ec2-ssh"},
+    {"GLPI_API_URL": "https://brunoferreira86dev.com/apirest.php/"},
+    {"GLPI_USERNAME": "glpi"},
+    {"IAM_AWS_ACCESS_KEY_ID": "AKIAU6GDX3JYXEQH2VNM"},
+    {"IMAGE_BUILDER_PARENT_IMAGE": "ami-04b70fa74e45c3917"},
+    {"MY_GITHUB_CONNECTION_NAME": "github_app_connection"},
+    {"RDS_1_DB_NAME": "db_upperplan_glpi"},
+    {"RDS_1_DB_USERNAME": "glpi_rootuser"},
+    {"RT53_DOMAIN": "brunoferreira86dev.com"},
+    {"SES_EMAIL_DOMAIN": "brunoferreira86dev.com"}
+  ]
+}

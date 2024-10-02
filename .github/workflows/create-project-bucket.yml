@@ -1,0 +1,27 @@
+name: "S1 - Create Project Bucket"
+run-name: "Create Project Bucket"
+
+on: 
+  workflow_dispatch:
+env:
+  AWS_ACCESS_KEY_ID: ${{ vars.IAM_AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.IAM_AWS_SECRET_ACCESS_KEY }}  
+
+jobs:
+  action:
+    name: "Project Bucket"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform Init
+        run: |
+          cd ./.setup_project/.project_bucket
+          terraform init
+
+      - name: Terraform Apply
+        run: |
+          cd ./.setup_project/.project_bucket
+          terraform apply -auto-approve \
+            -var=general_project_bucket_name=${{ vars.GENERAL_PROJECT_BUCKET_NAME }}

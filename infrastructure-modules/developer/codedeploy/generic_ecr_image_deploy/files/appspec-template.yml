@@ -1,0 +1,22 @@
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "task-definition-arn"
+        LoadBalancerInfo: 
+          ContainerName: "ecs-container-name" 
+          ContainerPort: "ecs-application-port"
+# Optional properties
+        PlatformVersion: "ecs-service-platform-version"
+        NetworkConfiguration:
+          AwsvpcConfiguration:
+            Subnets: ["ecs-subnet-1","ecs-subnet-n"] 
+            SecurityGroups: ["ecs-security-group-1","ecs-security-group-n"] 
+            AssignPublicIp: "ENABLED | DISABLED"
+        CapacityProviderStrategy:
+          - Base: integer
+            CapacityProvider: "capacityProviderA"
+            Weight: integer
+          - Base: integer
+            CapacityProvider: "capacityProviderB"
+            Weight: integer

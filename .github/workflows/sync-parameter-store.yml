@@ -1,0 +1,54 @@
+name: "S2 - Sync Parameter Store"
+run-name: "Sync Parameter Store"
+
+on: 
+  workflow_dispatch:
+    inputs:
+      ACTION:
+        required: true
+        type: string
+        description: "d = Destroy | Outros = Create"
+      CONFIRMATION:
+        required: true
+        type: string
+        description: "Vazio aborta. Qualquer valor confirma."
+  workflow_call:
+    inputs:
+      ACTION:
+        required: true
+        type: string
+        description: "d = Destroy | Outros = Create"
+env:
+  AWS_ACCESS_KEY_ID: ${{ vars.IAM_AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.IAM_AWS_SECRET_ACCESS_KEY }}  
+
+jobs:
+  action:
+    name: "Parameter Store"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform Init
+        run: |
+          cd ./.setup_project/.parameter_store_sync
+          terraform init -backend-config=./backend.tfvars
+
+      - name: Terraform Apply
+        if: ${{ inputs.ACTION != 'd' }}
+        run: |
+          cd ./.setup_project/.parameter_store_sync
+          terraform apply -auto-approve \
+            -var-file=./variables.tfvars \
+            '-var=github_secrets=${{ toJson(secrets) }}' \
+            '-var=github_vars=${{ toJson(vars) }}'
+
+      - name: Terraform Destroy
+        if: ${{ inputs.ACTION == 'd' }}
+        run: |
+          cd ./.setup_project/.parameter_store_sync
+          terraform destroy -auto-approve \
+            -var-file=./variables.tfvars \
+            '-var=github_secrets=${{ toJson(secrets) }}' \
+            '-var=github_vars=${{ toJson(vars) }}'

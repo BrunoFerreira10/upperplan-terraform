@@ -9,125 +9,114 @@ on:
         type: string
         description: "Vazio aborta. Qualquer valor confirma."
 
+## ---------------------------------------------------------------------------------------------------------------------
+## Create project 
+## ---------------------------------------------------------------------------------------------------------------------
 jobs:
-  ################################# 
-  ######## Create project #########
-  #################################
-  github_sync:
+  ## - Camada 1 --------------------------------------------------------------------------------------------------------
+
+  vpc:
+    needs: []
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '1a'
+      RESOURCE: '01a'
     secrets: inherit
 
-  vpc_app:
+  nat_gateway:
     needs: [
-      github_sync
+      vpc
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '2a'
+      RESOURCE: '01a1'
     secrets: inherit
 
-  acm_app:
-    needs: [
-      github_sync
-    ]
+  acm:
+    needs: []
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '2c'
+      RESOURCE: '01b'
     secrets: inherit
 
-  rds_app:
-    needs: [
-      github_sync, 
-      vpc_app
-    ]
+  cloudwatch_logs:
+    needs: []
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '3b'
+      RESOURCE: '01c'
+    secrets: inherit
+  
+  ecr:
+    needs: []
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '01d'
     secrets: inherit
 
-  efs_app:
-    needs: [
-      github_sync, 
-      vpc_app
-    ]
+  ses:
+    needs: []
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '3c'
+      RESOURCE: '01e'
     secrets: inherit
 
-  image_builder_app:
+  ## - Camada 2 --------------------------------------------------------------------------------------------------------
+
+  elb:
     needs: [
-      github_sync,
-      vpc_app
+      vpc, nat_gateway, acm, cloudwatch_logs, ecr, ses
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '4c'
+      RESOURCE: '02a'
     secrets: inherit
 
-  ami_app:
+  rds:
     needs: [
-      github_sync,
-      vpc_app,
-      image_builder_app
+      vpc, nat_gateway, acm, cloudwatch_logs, ecr, ses
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '5a'
+      RESOURCE: '02b'
     secrets: inherit
 
-  elb_app:
+  efs:
     needs: [
-      github_sync,
-      vpc_app, acm_app,
-      rds_app, efs_app,
-      ami_app
+      vpc, nat_gateway, acm, cloudwatch_logs, ecr, ses
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '6a'
+      RESOURCE: '02c'
     secrets: inherit
 
-  vpc_endpoint_codedeploy:
+  container_image_builder:
     needs: [
-      github_sync,
-      vpc_app
+      vpc, nat_gateway, acm, cloudwatch_logs, ecr, ses
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '7a'
-    secrets: inherit
-    
-  vpc_endpoint_s3:
-    needs: [
-      github_sync,
-      vpc_app
-    ]
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '7b'
+      RESOURCE: '02d'
     secrets: inherit
 
-  vpc_endpoint_ssm:
-    needs: [
-      github_sync,
-      vpc_app
-    ]
-    uses: ./.github/workflows/single-sub-project-run.yml
-    with:
-      RESOURCE: '7c'
-    secrets: inherit    
+  ## - Camada 3 --------------------------------------------------------------------------------------------------------
 
-  deploy_app:
+  ecs:
     needs: [
-      github_sync,
-      vpc_app,
-      rds_app,
-      elb_app
+      elb, rds, efs, container_image_builder
     ]
     uses: ./.github/workflows/single-sub-project-run.yml
     with:
-      RESOURCE: '8a'
+      RESOURCE: '03a'
     secrets: inherit
+
+  ## - Camada 4 --------------------------------------------------------------------------------------------------------
+
+  container_image_deploy:
+    needs: [
+      ecs
+    ]
+    uses: ./.github/workflows/single-sub-project-run.yml
+    with:
+      RESOURCE: '04a'
+    secrets: inherit
+
+  ## -------------------------------------------------------------------------------------------------------------------
