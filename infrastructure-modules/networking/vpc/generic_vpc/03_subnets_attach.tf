@@ -12,7 +12,7 @@ resource "aws_subnet" "public_az_a" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "subnet_public_az_a_app_${var.shortname}"
+    Name = "${var.env}_subnet_public_az_a_app_${var.shortname}"
   }
 }
 resource "aws_route_table_association" "public_az_a" {
@@ -33,7 +33,7 @@ resource "aws_subnet" "private_az_a" {
   availability_zone = "${var.region}a"
 
   tags = {
-    Name = "subnet_private_az_a_app_${var.shortname}"
+    Name = "${var.env}_subnet_private_az_a_app_${var.shortname}"
   }
 }
 resource "aws_route_table_association" "private_az_a" {
@@ -55,7 +55,7 @@ resource "aws_subnet" "public_az_b" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = "subnet_public_az_b_app_${var.shortname}"
+    Name = "${var.env}_subnet_public_az_b_app_${var.shortname}"
   }
 }
 resource "aws_route_table_association" "public_az_b" {
@@ -76,7 +76,7 @@ resource "aws_subnet" "private_az_b" {
   availability_zone = "${var.region}b"
 
   tags = {
-    Name = "subnet_private_az_b_app_${var.shortname}"
+    Name = "${var.env}_subnet_private_az_b_app_${var.shortname}"
   }
 }
 resource "aws_route_table_association" "private_az_b" {
@@ -99,7 +99,7 @@ resource "aws_network_acl_association" "private_az_b" {
 
 
 #   tags = {
-#     Name = "subnet_public_az_c_app_${var.shortname}"
+#     Name = "${var.env}_subnet_public_az_c_app_${var.shortname}"
 #   }
 # }
 # resource "aws_route_table_association" "public_az_c" {
@@ -120,7 +120,7 @@ resource "aws_network_acl_association" "private_az_b" {
 #   availability_zone = "${var.region}c"
 
 #   tags = {
-#     Name = "subnet_private_az_c_app_${var.shortname}"
+#     Name = "${var.env}_subnet_private_az_c_app_${var.shortname}"
 #   }
 # }
 # resource "aws_route_table_association" "private_az_c" {

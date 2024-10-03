@@ -1,1 +1,1 @@
-general_tag_shortname = "upperplan-glpi"
+general_tag_shortname = "upperplan_glpi"

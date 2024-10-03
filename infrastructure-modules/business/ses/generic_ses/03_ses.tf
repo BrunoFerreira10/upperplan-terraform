@@ -40,13 +40,14 @@ resource "aws_ses_receipt_rule" "this" {
 
   # Armazenar o e-mail recebido no S3 (opcional)
   s3_action {
-    bucket_name       = var.project_bucket.name
+    bucket_name       = var.project_bucket.bucket
     object_key_prefix = "${var.env}-emails/inbox-suporte/"
     position          = 2
   }
 
   depends_on = [
-    aws_lambda_function.create_ticket
+    aws_s3_bucket_policy.ses_bucket_policy,
+    null_resource.workaround_aws_ses_receipt_rule
   ]
 }
 

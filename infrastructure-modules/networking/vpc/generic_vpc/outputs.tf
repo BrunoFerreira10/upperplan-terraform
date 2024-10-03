@@ -1,5 +1,5 @@
 output "vpc" {
-  description = "App VPC information"
+  description = "VPC information"
   value = {
     cidr_block = aws_vpc.this.cidr_block
     id         = aws_vpc.this.id
@@ -7,7 +7,7 @@ output "vpc" {
       private = aws_network_acl.private
       public  = aws_network_acl.public
     }
-    name = "vpc_app"
+    name = "${var.env}_vpc_${var.shortname}"
     router_tables = {
       private = aws_route_table.private
       public  = aws_route_table.public

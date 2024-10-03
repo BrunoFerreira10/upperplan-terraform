@@ -1,3 +1,9 @@
+variable "env" {
+  type = string
+  description = "Ambiente onde a infraestrutura será criada."
+  default = "env"
+}
+
 variable "region" {
   type        = string
   description = "Região onde a infraestrutura será criada."

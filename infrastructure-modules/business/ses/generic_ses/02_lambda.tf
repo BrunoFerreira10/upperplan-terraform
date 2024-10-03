@@ -44,7 +44,7 @@ resource "aws_lambda_function" "create_ticket" {
       GLPI_USERNAME  = var.glpi_username
       GLPI_PASSWORD  = data.aws_ssm_parameter.glpi_password.value
       GLPI_APP_TOKEN = data.aws_ssm_parameter.glpi_app_token.value
-      S3_BUCKET_NAME = var.project_bucket.name
+      S3_BUCKET_NAME = var.project_bucket.bucket
     }
   }
 
@@ -54,6 +54,24 @@ resource "aws_lambda_function" "create_ticket" {
   depends_on = [
     null_resource.package_lambda,
     data.archive_file.lambda_zip
+  ]
+}
+
+# - WORKAROUND - Intervalo de tempo entre a criação da função lambda e seu uso no SES ----------------------------------
+resource "null_resource" "workaround_aws_ses_receipt_rule" {
+  provisioner "local-exec" {
+    command = <<EOT
+    sleep 10
+    EOT
+  }
+
+  # Isso garante que sempre seja executado.
+  triggers = {
+    always_run = "${timestamp()}"
+  }
+
+  depends_on = [
+    aws_lambda_function.create_ticket
   ]
 }
 

@@ -19,7 +19,7 @@ resource "aws_s3_bucket_policy" "ses_bucket_policy" {
           "Service": "ses.amazonaws.com"
         },
         "Action": "s3:PutObject",
-        "Resource": "arn:aws:s3:::${aws_s3_bucket.ses_bucket.id}/*",
+        "Resource": "arn:aws:s3:::${var.project_bucket.bucket}/*",
         "Condition": {
           "StringEquals": {
             "AWS:SourceAccount": "${local.account_id}"

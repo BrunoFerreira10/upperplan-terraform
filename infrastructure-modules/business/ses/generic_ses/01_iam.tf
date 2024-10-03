@@ -51,7 +51,7 @@ resource "aws_iam_policy" "lambda_ses_policy" {
           "s3:GetObject",
           "s3:DeleteObject"
         ],
-        Resource = "arn:aws:s3:::${var.project_bucket.name}/*"
+        Resource = "arn:aws:s3:::${var.project_bucket.bucket}/*"
       }
     ]
   })

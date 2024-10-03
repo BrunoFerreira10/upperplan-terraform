@@ -6,9 +6,9 @@ provider "aws" {
   region = "us-east-1"
   default_tags {
     tags = {
-      "author"     = "Bruno Ferreira"
-      "customer"   = "Upper Plan"
-      "project"    = "GLPI"
+      "author"     = "BrunoFerreira"
+      "customer"   = "UpperPlan"
+      "project"    = "glpi"
       "managed-by" = "terraform"
     }
   }

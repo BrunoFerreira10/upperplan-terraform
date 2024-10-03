@@ -7,7 +7,7 @@ resource "aws_vpc" "this" {
   enable_dns_support   = true
 
   tags = {
-    Name = "vpc_app_${var.shortname}"
+    Name = "${var.env}_vpc_${var.shortname}"
   }
 }
 
@@ -17,7 +17,7 @@ resource "aws_default_security_group" "default" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "sg_default_app_${var.shortname}"
+    Name = "${var.env}_sg_default_app_${var.shortname}"
   }
 }
 
@@ -28,6 +28,6 @@ resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "igw_app_${var.shortname}"
+    Name = "${var.env}_igw_app_${var.shortname}"
   }
 }

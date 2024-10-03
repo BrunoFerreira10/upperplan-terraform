@@ -5,7 +5,7 @@ resource "aws_default_route_table" "default" {
   default_route_table_id = aws_vpc.this.default_route_table_id
 
   tags = {
-    Name = "rt_default_app_${var.shortname}"
+    Name = "${var.env}_rt_default_app_${var.shortname}"
   }
 }
 
@@ -18,7 +18,7 @@ resource "aws_route_table" "public" {
   }
 
   tags = {
-    Name = "rt_public_app_${var.shortname}"
+    Name = "${var.env}_rt_public_app_${var.shortname}"
   }
 }
 
@@ -26,7 +26,7 @@ resource "aws_route_table" "private" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "rt_private_app_${var.shortname}"
+    Name = "${var.env}_rt_private_app_${var.shortname}"
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_default_network_acl" "default" {
   default_network_acl_id = aws_vpc.this.default_network_acl_id
 
   tags = {
-    Name = "nacl_default_app_${var.shortname}"
+    Name = "${var.env}_nacl_default_app_${var.shortname}"
   }
 }
 
@@ -45,7 +45,7 @@ resource "aws_network_acl" "public" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "nacl_public_app_${var.shortname}"
+    Name = "${var.env}_nacl_public_app_${var.shortname}"
   }
 }
 
@@ -53,7 +53,7 @@ resource "aws_network_acl" "private" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "nacl_private_app_${var.shortname}"
+    Name = "${var.env}_nacl_private_app_${var.shortname}"
   }
 }
 
