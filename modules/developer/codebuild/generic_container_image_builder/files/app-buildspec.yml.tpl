@@ -36,7 +36,7 @@ phases:
         --build-arg DB_NAME="$DB_NAME"
         --build-arg DB_USER="$DB_USER"
         --build-arg DB_PASSWORD="$DB_PASSWORD"
-        -t ${REPOSITORY_URI}:latest .
+        -f Dockerfile_${ENV} -t ${REPOSITORY_URI}:latest .
   post_build:
     commands:
       - echo "Taggeando a imagem Docker"
