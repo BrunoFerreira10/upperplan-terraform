@@ -18,7 +18,7 @@ locals {
       }
     }
     dev = {
-      aws_ecs_service_desired_count = 1
+      aws_ecs_service_desired_count = 0
     }
 
     prod = {
