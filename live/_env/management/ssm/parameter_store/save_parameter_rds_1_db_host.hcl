@@ -1,0 +1,29 @@
+locals {
+  env              = read_terragrunt_config(find_in_parent_folders("env.hcl")).locals.env
+  github_vars_mock = read_terragrunt_config(find_in_parent_folders("common.hcl")).locals.github_vars_mock
+  mock             = read_terragrunt_config(find_in_parent_folders("mock.hcl")).locals
+
+  config = {
+    common = {
+      param_name = "/${local.env}/${local.github_vars_mock.general_tag_shortname}/app_vars/rds_1_db_host"
+    }
+  }
+
+  default_config  = local.config.common
+  selected_config = lookup(local.config, local.env, local.default_config)
+  skip            = lookup(local.selected_config, "skip", lookup(local.default_config, "skip", null))
+}
+
+dependency "rds" {
+  config_path = "${get_terragrunt_dir()}/../../../../database/rds"
+
+  mock_outputs_allowed_terraform_commands = ["validate","plan","destroy"]
+  mock_outputs                            = local.mock.rds
+}
+
+inputs = {
+  param_value = dependency.rds.outputs.rds.private_ip
+  param_name  = lookup(local.selected_config, "param_name",
+                lookup(local.default_config, "param_name", null))
+
+}
